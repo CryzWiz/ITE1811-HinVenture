@@ -11,5 +11,9 @@ namespace HiN_Ventures.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string BitCoinAddress { get; set; }
+        public string PostAddress { get; set; }
+        public string CompayName { get; set; }
     }
 }
