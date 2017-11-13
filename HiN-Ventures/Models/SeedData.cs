@@ -11,7 +11,6 @@ namespace HiN_Ventures.Models
     {
         public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM, RoleManager<IdentityRole> rM)
         {
-
             await createRolesAsync(context, rM);
             await createUsersAsync(context, uM);
         }
