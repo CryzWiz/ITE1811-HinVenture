@@ -11,8 +11,17 @@ namespace HiN_Ventures.Models
     {
         public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM, RoleManager<IdentityRole> rM)
         {
-            await createRolesAsync(context, rM);
-            await createUsersAsync(context, uM);
+            if (!context.Roles.Any())
+            {
+                await createRolesAsync(context, rM);
+            }
+             
+            if (!context.Users.Any())
+            {
+                await createAdminAsync(context, uM);
+                await createFreelanceAsync(context, uM);
+                await createKlientAsync(context, uM);
+            }
             await createSkills(context);
         }
 
@@ -30,18 +39,52 @@ namespace HiN_Ventures.Models
             }
         }
 
-        private static async Task createUsersAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        private static async Task createAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
-            var user = new ApplicationUser
+            // Add a admin
+            var admin = new ApplicationUser
             {
                 UserName = "admin@test.com",
-                Email = "admin@test.com"
+                Email = "admin@test.com",
             };
+            string apassword = uM.PasswordHasher.HashPassword(admin, "Password@123");
+            admin.PasswordHash = apassword;
+            await uM.CreateAsync(admin);
+            var aU = await uM.FindByEmailAsync(admin.Email);
+            await uM.AddToRoleAsync(aU, "Administrator");
+            await context.SaveChangesAsync();
 
-            await uM.CreateAsync(user);
-            var cU = await uM.FindByEmailAsync(user.Email);
-            await uM.AddPasswordAsync(user, "passord1@admin");
-            await uM.AddToRoleAsync(user, "Administrator");
+        }
+
+        private static async Task createFreelanceAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+            // Add a freelance
+            var freelance = new ApplicationUser
+            {
+                UserName = "freelance@test.com",
+                Email = "freelance@test.com",
+            };
+            string fpassword = uM.PasswordHasher.HashPassword(freelance, "Password@123");
+            freelance.PasswordHash = fpassword;
+            await uM.CreateAsync(freelance);
+            var fU = await uM.FindByEmailAsync(freelance.Email);
+            await uM.AddToRoleAsync(fU, "Freelance");
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task createKlientAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+            // Add a klient
+            var klient = new ApplicationUser
+            {
+                UserName = "klient@test.com",
+                Email = "klient@test.com",
+            };
+            string kpassword = uM.PasswordHasher.HashPassword(klient, "Password@123");
+            klient.PasswordHash = kpassword;
+            await uM.CreateAsync(klient);
+            var kU = await uM.FindByEmailAsync(klient.Email);
+            await uM.AddToRoleAsync(kU, "Freelance");
             await context.SaveChangesAsync();
         }
 

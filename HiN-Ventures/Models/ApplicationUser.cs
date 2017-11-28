@@ -14,6 +14,6 @@ namespace HiN_Ventures.Models
         public DateTime? BirthDate { get; set; }
         public string BitCoinAddress { get; set; }
         public string PostAddress { get; set; }
-        public string CompayName { get; set; }
+        public string CompanyName { get; set; }
     }
 }

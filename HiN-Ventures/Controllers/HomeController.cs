@@ -17,7 +17,7 @@ namespace HiN_Ventures.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Prosjektoppgave ITE1811 høsten -17";
 
             return View();
         }
