@@ -13,6 +13,21 @@ namespace HiN_Ventures.Models
         {
             await createRolesAsync(context, rM);
             await createUsersAsync(context, uM);
+            await createSkills(context);
+        }
+
+        private static async Task createSkills(ApplicationDbContext context)
+        {
+            if (!context.Skills.Any())
+            {
+                await context.AddRangeAsync(
+                    new Skill { Name = "Java"},
+                    new Skill { Name = "C#" },
+                    new Skill { Name = "PHP" },
+                    new Skill { Name = "JavaScript" }
+                );
+                await context.SaveChangesAsync();
+            }
         }
 
         private static async Task createUsersAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
