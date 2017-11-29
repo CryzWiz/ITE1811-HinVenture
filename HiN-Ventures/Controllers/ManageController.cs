@@ -57,8 +57,11 @@ namespace HiN_Ventures.Controllers
             var model = new IndexViewModel
             {
                 Username = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
+                BirthDate = user.BirthDate.ToString(),
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage
             };

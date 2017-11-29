@@ -10,6 +10,12 @@ namespace HiN_Ventures.Models.ManageViewModels
     {
         public string Username { get; set; }
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string BirthDate { get; set; }
+
         public bool IsEmailConfirmed { get; set; }
 
         [Required]
