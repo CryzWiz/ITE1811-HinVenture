@@ -84,7 +84,7 @@ namespace HiN_Ventures.Models
             klient.PasswordHash = kpassword;
             await uM.CreateAsync(klient);
             var kU = await uM.FindByEmailAsync(klient.Email);
-            await uM.AddToRoleAsync(kU, "Freelance");
+            await uM.AddToRoleAsync(kU, "Klient");
             await context.SaveChangesAsync();
         }
 
