@@ -13,6 +13,8 @@ namespace HiN_Ventures.Views.Manage
 
         public static string Index => "Index";
 
+        public static string BitCoin => "BitCoin";
+
         public static string ChangePassword => "ChangePassword";
 
         public static string ExternalLogins => "ExternalLogins";
@@ -20,6 +22,8 @@ namespace HiN_Ventures.Views.Manage
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
+
+        public static string BitCoinNavClass(ViewContext viewContext) => PageNavClass(viewContext, BitCoin);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 

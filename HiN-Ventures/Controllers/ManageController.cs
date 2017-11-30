@@ -181,6 +181,21 @@ namespace HiN_Ventures.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> BitCoin()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new BitCoinViewModel { StatusMessage = StatusMessage, BitCoinAddress = user.BitCoinAddress };
+
+            return View(model);
+
+        }
+
+        [HttpGet]
         public async Task<IActionResult> SetPassword()
         {
             var user = await _userManager.GetUserAsync(User);

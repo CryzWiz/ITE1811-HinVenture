@@ -46,6 +46,7 @@ namespace HiN_Ventures.Models
             {
                 UserName = "admin@test.com",
                 Email = "admin@test.com",
+                BitCoinAddress = "2MzmfescR93yajEkRgREjy1ckQTgNmnaYB2"
             };
             string apassword = uM.PasswordHasher.HashPassword(admin, "Password@123");
             admin.PasswordHash = apassword;
@@ -63,6 +64,7 @@ namespace HiN_Ventures.Models
             {
                 UserName = "freelance@test.com",
                 Email = "freelance@test.com",
+                BitCoinAddress = "2NDCWFTsWtHvd2aF4AGhT58hZHj3wHCeoJL"
             };
             string fpassword = uM.PasswordHasher.HashPassword(freelance, "Password@123");
             freelance.PasswordHash = fpassword;
@@ -79,6 +81,7 @@ namespace HiN_Ventures.Models
             {
                 UserName = "klient@test.com",
                 Email = "klient@test.com",
+                BitCoinAddress = "2NEfcArP1PmmDNjUTihDqLrVS4YkRKMbw5F"
             };
             string kpassword = uM.PasswordHasher.HashPassword(klient, "Password@123");
             klient.PasswordHash = kpassword;
