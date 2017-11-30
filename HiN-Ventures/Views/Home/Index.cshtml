@@ -16,39 +16,45 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <div class="col-md-offset-2 col-md-4">
+            <p>Registered information about logged in user:</p>
             <dl class="dl-horizontal">
                 <dt>
-                    <p>Username:</p>
+                    Username:
                 </dt>
                 <dd>
                     @UserManager.GetUserName(User)
                 </dd>
                 <dt>
-                    <p>UserId:</p>
+                    UserId:
                 </dt>
                 <dd>
                     @UserManager.GetUserId(User)
                 </dd>
                 <dt>
-                    <p>Admin:</p>
+                    ROLES:
                 </dt>
                 <dd>
-                    @User.IsInRole("Admin")
                 </dd>
                 <dt>
-                    <p>Senior:</p>
+                    Admin:
+                </dt>
+                <dd>
+                    @User.IsInRole("Administrator")
+                </dd>
+                <dt>
+                    Senior:
                 </dt>
                 <dd>
                     @User.IsInRole("Senior")
                 </dd>
                 <dt>
-                    <p>Freelancer:</p>
+                    Freelancer:
                 </dt>
                 <dd>
                     @User.IsInRole("Freelance")
                 </dd>
                 <dt>
-                    <p>Klient:</p>
+                    Klient:
                 </dt>
                 <dd>
                     @User.IsInRole("Klient")

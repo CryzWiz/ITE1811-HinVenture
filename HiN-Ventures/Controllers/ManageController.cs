@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using HiN_Ventures.Models;
 using HiN_Ventures.Models.ManageViewModels;
 using HiN_Ventures.Services;
+using HiN_Ventures.Data;
 
 namespace HiN_Ventures.Controllers
 {
@@ -22,6 +23,7 @@ namespace HiN_Ventures.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private ApplicationDbContext db;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
@@ -101,6 +103,29 @@ namespace HiN_Ventures.Controllers
                 if (!setPhoneResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
+                }
+            }
+
+            var firstname = user.FirstName;
+            if (model.FirstName != firstname)
+            {
+
+                user.FirstName = model.FirstName;
+                var setFirstNameResult = await _userManager.UpdateAsync(user);
+                if (!setFirstNameResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting firstname for user with ID '{user.Id}'.");
+                }
+            }
+
+            var lastname = user.LastName;
+            if (model.LastName != lastname)
+            {
+                user.LastName = model.LastName;
+                var setLastNameResult = await _userManager.UpdateAsync(user);
+                if (!setLastNameResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting lastname for user with ID '{user.Id}'.");
                 }
             }
 
