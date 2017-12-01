@@ -11,7 +11,7 @@ Klient:
 	BitCoinAddress:2NEfcArP1PmmDNjUTihDqLrVS4YkRKMbw5F 
 
 Freelancer:
-	Username:freelancer@test.com
+	Username:freelance@test.com
 	Password:Password@123
 	BitCoinAddress:2NDCWFTsWtHvd2aF4AGhT58hZHj3wHCeoJL 
 

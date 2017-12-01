@@ -6,23 +6,15 @@ using System.Threading.Tasks;
 
 namespace HiN_Ventures.Models.ManageViewModels
 {
-    public class IndexViewModel
+    public class IndexKlientViewModel
     {
         public string Username { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
-        public DateTime? BirthDate { get; set; }
-
-        public string Personnummer { get; set; }
-
-        public string PostAddress { get; set; }
 
         public string CompanyName { get; set; }
 
         public string OrgNumber { get; set; }
+
+        public string PostAddress { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 

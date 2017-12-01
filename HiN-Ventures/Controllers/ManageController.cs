@@ -57,19 +57,59 @@ namespace HiN_Ventures.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            FreelancerInfo f = _context.FreelancerInfo.SingleOrDefault(X => X.UserId == user.Id);
-            var model = new IndexViewModel
-            {
-                Username = user.UserName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                IsEmailConfirmed = user.EmailConfirmed,
-               // FirstName = f.FirstName,
-               // LastName = f.LastName,
-                StatusMessage = StatusMessage
-            };
 
-            return View(model);
+            if(await _userManager.IsInRoleAsync(user, "Klient"))
+            {
+                List<KlientInfo> list = _context.KlientInfo.ToList();
+                KlientInfo k = list.FirstOrDefault(X => X.UserId == user.Id);
+                var fname = k.ToString();
+                var lname = k.OrgNumber;
+
+                var model = new IndexViewModel
+                {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    IsEmailConfirmed = user.EmailConfirmed,
+                    CompanyName = k.CompanyName,
+                    OrgNumber = k.OrgNumber,
+                    PostAddress = k.PostAddress,
+                    StatusMessage = StatusMessage
+                };
+                return View(model);
+            }
+            else if (await _userManager.IsInRoleAsync(user, "Freelance"))
+            {
+                List<FreelancerInfo> list = _context.FreelancerInfo.ToList();
+                FreelancerInfo f = list.FirstOrDefault(X => X.UserId == user.Id);
+
+                var model = new IndexViewModel
+                {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    IsEmailConfirmed = user.EmailConfirmed,
+                    FirstName = f.FirstName,
+                    LastName = f.LastName,
+                    BirthDate = f.BirthDate,
+                    Personnummer = f.Personnummer,
+                    PostAddress = f.PostAddress,
+                    StatusMessage = StatusMessage
+                };
+                return View(model);
+            }
+            else
+            {
+                var model = new IndexViewModel
+                {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    IsEmailConfirmed = user.EmailConfirmed,
+                    StatusMessage = StatusMessage
+                };
+                return View(model);
+            }
         }
 
         [HttpPost]
