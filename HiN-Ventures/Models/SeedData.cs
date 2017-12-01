@@ -42,16 +42,30 @@ namespace HiN_Ventures.Models
         private static async Task createAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a admin
+            DateTime regdate = new DateTime();
             var admin = new ApplicationUser
             {
                 UserName = "admin@test.com",
                 Email = "admin@test.com",
-                BitCoinAddress = "2MzmfescR93yajEkRgREjy1ckQTgNmnaYB2"
+                RegDate = regdate
             };
             string apassword = uM.PasswordHasher.HashPassword(admin, "Password@123");
             admin.PasswordHash = apassword;
             await uM.CreateAsync(admin);
+
             var aU = await uM.FindByEmailAsync(admin.Email);
+
+            context.BitCoinAddress.AddRange(new BitCoinAddress
+            {
+                UserId = aU.Id,
+                Address = "2MzmfescR93yajEkRgREjy1ckQTgNmnaYB2",
+                Name = "PrimærAddresse",
+                Active = true,
+                Primary = true,
+                RegDate = regdate
+
+            });
+            context.SaveChanges();
             await uM.AddToRoleAsync(aU, "Administrator");
             await context.SaveChangesAsync();
 
@@ -60,16 +74,43 @@ namespace HiN_Ventures.Models
         private static async Task createFreelanceAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a freelance
+            DateTime regDate = new DateTime();
             var freelance = new ApplicationUser
             {
                 UserName = "freelance@test.com",
                 Email = "freelance@test.com",
-                BitCoinAddress = "2NDCWFTsWtHvd2aF4AGhT58hZHj3wHCeoJL"
+                RegDate = regDate
             };
             string fpassword = uM.PasswordHasher.HashPassword(freelance, "Password@123");
             freelance.PasswordHash = fpassword;
             await uM.CreateAsync(freelance);
+
             var fU = await uM.FindByEmailAsync(freelance.Email);
+
+            context.FreelancerInfo.AddRange(new FreelancerInfo
+            {
+                UserId = fU.Id,
+                FirstName = "Freelancer",
+                LastName = "Testesen",
+                BirthDate = regDate,
+                Personnummer = "1808831524",
+                PostAddress = "Freelanceveien 1, 9303 Silsand"
+
+            });
+            context.SaveChanges();
+
+            context.BitCoinAddress.AddRange(new BitCoinAddress
+            {
+                UserId = fU.Id,
+                Address = "2NDCWFTsWtHvd2aF4AGhT58hZHj3wHCeoJL",
+                Name = "PrimærAddresse",
+                Active = true,
+                Primary = true,
+                RegDate = regDate
+
+            });
+            context.SaveChanges();
+
             await uM.AddToRoleAsync(fU, "Freelance");
             await context.SaveChangesAsync();
         }
@@ -77,16 +118,40 @@ namespace HiN_Ventures.Models
         private static async Task createKlientAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a klient
+            DateTime regDate = new DateTime();
             var klient = new ApplicationUser
             {
                 UserName = "klient@test.com",
                 Email = "klient@test.com",
-                BitCoinAddress = "2NEfcArP1PmmDNjUTihDqLrVS4YkRKMbw5F"
             };
             string kpassword = uM.PasswordHasher.HashPassword(klient, "Password@123");
             klient.PasswordHash = kpassword;
             await uM.CreateAsync(klient);
+
             var kU = await uM.FindByEmailAsync(klient.Email);
+
+            context.KlientInfo.AddRange(new KlientInfo
+            {
+                UserId = kU.Id,
+                CompanyName = "TestKlient Comp",
+                OrgNumber = "974123123",
+                PostAddress = "Klientveien 1, 9303 Silsand"
+
+            });
+            context.SaveChanges();
+
+            context.BitCoinAddress.AddRange(new BitCoinAddress
+            {
+                UserId = kU.Id,
+                Address = "2NEfcArP1PmmDNjUTihDqLrVS4YkRKMbw5F",
+                Name = "PrimærAddresse",
+                Active = true,
+                Primary = true,
+                RegDate = regDate
+
+            });
+            context.SaveChanges();
+
             await uM.AddToRoleAsync(kU, "Klient");
             await context.SaveChangesAsync();
         }

@@ -23,7 +23,7 @@ namespace HiN_Ventures.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
@@ -35,13 +35,15 @@ namespace HiN_Ventures.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _context = context;
         }
 
         [TempData]
@@ -55,16 +57,15 @@ namespace HiN_Ventures.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
+            FreelancerInfo f = _context.FreelancerInfo.SingleOrDefault(X => X.UserId == user.Id);
             var model = new IndexViewModel
             {
                 Username = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                BirthDate = user.BirthDate.ToString(),
                 IsEmailConfirmed = user.EmailConfirmed,
+               // FirstName = f.FirstName,
+               // LastName = f.LastName,
                 StatusMessage = StatusMessage
             };
 
@@ -106,11 +107,13 @@ namespace HiN_Ventures.Controllers
                 }
             }
 
-            var firstname = user.FirstName;
+            FreelancerInfo f = await _context.FreelancerInfo.FindAsync(user.Id);
+            
+            var firstname = f.FirstName;
             if (model.FirstName != firstname)
             {
 
-                user.FirstName = model.FirstName;
+                f.FirstName = model.FirstName;
                 var setFirstNameResult = await _userManager.UpdateAsync(user);
                 if (!setFirstNameResult.Succeeded)
                 {
@@ -118,10 +121,10 @@ namespace HiN_Ventures.Controllers
                 }
             }
 
-            var lastname = user.LastName;
+            var lastname = f.LastName;
             if (model.LastName != lastname)
             {
-                user.LastName = model.LastName;
+                f.LastName = model.LastName;
                 var setLastNameResult = await _userManager.UpdateAsync(user);
                 if (!setLastNameResult.Succeeded)
                 {
@@ -214,7 +217,7 @@ namespace HiN_Ventures.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var model = new BitCoinViewModel { StatusMessage = StatusMessage, BitCoinAddress = user.BitCoinAddress };
+            var model = new BitCoinViewModel { StatusMessage = StatusMessage/*, BitCoinAddress = user.BitCoinAddress */};
 
             return View(model);
 

@@ -223,8 +223,6 @@ namespace HiN_Ventures.Controllers
                 var user = new ApplicationUser {
                     UserName = model.UserName,
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -254,12 +252,12 @@ namespace HiN_Ventures.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                DateTime t = new DateTime();
                 var user = new ApplicationUser
                 {
                     UserName = model.UserName,
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
+                    RegDate = t,
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -294,12 +292,12 @@ namespace HiN_Ventures.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                DateTime t = new DateTime();
                 var user = new ApplicationUser
                 {
                     UserName = model.UserName,
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
+                    RegDate = t
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

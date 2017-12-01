@@ -16,12 +16,17 @@ namespace HiN_Ventures.Data
         }
 
         public virtual DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<FreelancerInfo> FreelancerInfo { get; set; }
+        public virtual DbSet<KlientInfo> KlientInfo { get; set; }
+        public virtual DbSet<BitCoinAddress> BitCoinAddress { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.Entity<Skill>().ToTable("Skill");
+            builder.Entity<FreelancerInfo>().ToTable("Freelancer");
+            builder.Entity<KlientInfo>().ToTable("Klient");
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
