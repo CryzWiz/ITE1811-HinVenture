@@ -18,5 +18,13 @@ namespace HiN_Ventures.Models
         {
             return await Task.Run(() => _db.Projects);
         }
+
+        public async Task AddAsync(Project project)
+        {
+            await Task.Run(() => _db.Projects.Add(project));
+            await _db.SaveChangesAsync();
+        }
+
+        
     }
 }

@@ -16,7 +16,7 @@ namespace HiN_Ventures_UnitTests
     public class ProjectControllerTest
     {
         Mock<IProjectRepository> _repository;
-        IEnumerable<Project> _fakeProjects;
+        List<Project> _fakeProjects;
 
         [TestInitialize]
         public void Setup()
@@ -67,10 +67,9 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public void CreateHttpGet_ReturnsProjectCreateViewModel()
+        public void CreateGet_ReturnsView()
         {
             // Arrange
-            //var projectCreateVM = new ProjectCreateViewModel();
             var controller = new ProjectController(_repository.Object);
            
             // Act
@@ -79,8 +78,34 @@ namespace HiN_Ventures_UnitTests
             // Assert
             Assert.IsNotNull(result, "ViewResult is null");
             Assert.IsInstanceOfType(result, typeof(ViewResult));
-
-            
         }
+
+        /*[TestMethod]
+        public async Task CreatePost_AddAsyncIsCalled()
+        {
+            // Arrange
+            _repository.Setup(x => x.AddAsync(It.IsAny<Project>()));
+            var controller = new ProjectController(_repository.Object);
+
+            DateTime deadline = DateTime.Now;
+            var createVM = new ProjectCreateViewModel()
+            {
+                ProjectTitle = "Title",
+                ProjectDescription = "Description",
+                Active = true,
+                Open = true,
+                Deadline = deadline
+            };
+
+            // Act
+            var result = await controller.Create(createVM);
+
+            // Assert
+            Assert.IsNotNull(result, "ViewResult is null");
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            _repository.VerifyAll();
+            _repository.Verify(x => x.AddAsync(It.IsAny<Project>()), Times.Exactly(1));
+
+        }*/
     }
 }

@@ -32,9 +32,27 @@ namespace HiN_Ventures.Controllers
 
         [HttpPost]
         // Husk authorize (legges til senere pga. testing)
-        public async Task<IActionResult> Create(ProjectCreateViewModel vm)
+        public async Task<IActionResult> Create(
+            [Bind("ProjectTitle, ProjectDescription, Active, Open, Deadline")]
+            ProjectCreateViewModel vm)
         {
-            return View();
+            if(ModelState.IsValid)
+            {
+                Project project = new Project
+                {
+                    ProjectTitle = vm.ProjectTitle,
+                    ProjectDescription = vm.ProjectDescription,
+                    Active = vm.Active,
+                    Open = vm.Open,
+                    Deadline = vm.Deadline
+                };
+
+                await _repository.AddAsync(project);
+                return RedirectToAction("Index", "Home");
+            }
+
+            // If we get here, something went wrong
+            return View(vm);
         }
 
         public async Task<IActionResult> GetAll()
