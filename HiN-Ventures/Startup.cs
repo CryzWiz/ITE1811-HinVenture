@@ -35,6 +35,7 @@ namespace HiN_Ventures
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IProjectRepository, EFProjectRepository>();
 
             services.AddMvc();
         }

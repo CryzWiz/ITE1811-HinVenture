@@ -23,6 +23,20 @@ namespace HiN_Ventures.Models
                 await createKlientAsync(context, uM);
             }
             await createSkills(context);
+            await CreateProjectsAsync(context);
+        }
+
+        private static async Task CreateProjectsAsync(ApplicationDbContext context)
+        {
+            if (!context.Projects.Any())
+            {
+                await context.AddRangeAsync(
+                    new Project { ProjectTitle = "TestProject1", ProjectDescription = "Testing creating a project" },
+                    new Project { ProjectTitle = "TestProject2", ProjectDescription = "Testing creating a project" },
+                    new Project { ProjectTitle = "TestProject3", ProjectDescription = "Testing creating a project" }
+                    );
+                await context.SaveChangesAsync();
+            }
         }
 
         private static async Task createSkills(ApplicationDbContext context)
