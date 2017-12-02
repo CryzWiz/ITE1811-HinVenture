@@ -13,16 +13,16 @@ namespace HiN_Ventures.Models
         {
             if (!context.Roles.Any())
             {
-                await createRolesAsync(context, rM);
+                await CreateRolesAsync(context, rM);
             }
              
             if (!context.Users.Any())
             {
-                await createAdminAsync(context, uM);
-                await createFreelanceAsync(context, uM);
-                await createKlientAsync(context, uM);
+                await CreateAdminAsync(context, uM);
+                await CreateFreelanceAsync(context, uM);
+                await CreateKlientAsync(context, uM);
             }
-            await createSkills(context);
+            await CreateSkills(context);
             await CreateProjectsAsync(context);
         }
 
@@ -39,7 +39,7 @@ namespace HiN_Ventures.Models
             }
         }
 
-        private static async Task createSkills(ApplicationDbContext context)
+        private static async Task CreateSkills(ApplicationDbContext context)
         {
             if (!context.Skills.Any())
             {
@@ -53,7 +53,7 @@ namespace HiN_Ventures.Models
             }
         }
 
-        private static async Task createAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        private static async Task CreateAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a admin
             DateTime regdate = new DateTime();
@@ -85,7 +85,7 @@ namespace HiN_Ventures.Models
 
         }
 
-        private static async Task createFreelanceAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        private static async Task CreateFreelanceAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a freelance
             DateTime regDate = new DateTime();
@@ -129,7 +129,7 @@ namespace HiN_Ventures.Models
             await context.SaveChangesAsync();
         }
 
-        private static async Task createKlientAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        private static async Task CreateKlientAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a klient
             DateTime regDate = new DateTime();
@@ -170,7 +170,7 @@ namespace HiN_Ventures.Models
             await context.SaveChangesAsync();
         }
 
-        private static async Task createRolesAsync(ApplicationDbContext context, RoleManager<IdentityRole> rM)
+        private static async Task CreateRolesAsync(ApplicationDbContext context, RoleManager<IdentityRole> rM)
         {
             await rM.CreateAsync(new IdentityRole("Administrator"));
             await context.SaveChangesAsync();
