@@ -9,5 +9,7 @@ namespace HiN_Ventures.Models
     {
         Task<IEnumerable<Project>> GetAllAsync();
         Task AddAsync(Project project);
+
+        Project GetById(int id);
     }
 }

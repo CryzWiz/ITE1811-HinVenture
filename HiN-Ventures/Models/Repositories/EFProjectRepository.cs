@@ -25,6 +25,11 @@ namespace HiN_Ventures.Models
             await _db.SaveChangesAsync();
         }
 
+        public Project GetById(int id)
+        {
+            return _db.Projects.Where(x => x.ProjectId == id).FirstOrDefault();
+        }        
+
         
     }
 }
