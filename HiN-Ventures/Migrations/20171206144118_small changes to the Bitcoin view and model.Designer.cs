@@ -11,9 +11,10 @@ using System;
 namespace HiN_Ventures.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171206144118_small changes to the Bitcoin view and model")]
+    partial class smallchangestotheBitcoinviewandmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
