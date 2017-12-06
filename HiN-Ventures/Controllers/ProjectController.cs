@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HiN_Ventures.Models;
 using HiN_Ventures.Models.ProjectViewModels;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Principal;
 
 namespace HiN_Ventures.Controllers
 {
@@ -26,28 +28,31 @@ namespace HiN_Ventures.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-
             return View(new ProjectCreateViewModel());
         }
 
         [HttpPost]
-        // Husk authorize (legges til senere pga. testing)
+        [Authorize]
         public async Task<IActionResult> Create(
             [Bind("ProjectTitle, ProjectDescription, Active, Open, Deadline")]
             ProjectCreateViewModel vm)
         {
             if(ModelState.IsValid)
             {
+                IPrincipal user = User;
+
                 Project project = new Project
                 {
+              
                     ProjectTitle = vm.ProjectTitle,
                     ProjectDescription = vm.ProjectDescription,
                     Active = vm.Active,
                     Open = vm.Open,
                     Deadline = vm.Deadline
+
                 };
 
-                await _repository.AddAsync(project);
+                await _repository.AddAsync(project, User);
                 return RedirectToAction("Index", "Home");
             }
 

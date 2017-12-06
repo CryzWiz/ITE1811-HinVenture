@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections;
 using HiN_Ventures.Models.ProjectViewModels;
+using System.Security.Principal;
 
 namespace HiN_Ventures_UnitTests
 {
@@ -107,5 +108,28 @@ namespace HiN_Ventures_UnitTests
             _repository.Verify(x => x.AddAsync(It.IsAny<Project>()), Times.Exactly(1));
 
         }*/
+
+        [TestMethod]
+        public async Task CreatePost_AddAsyncIsCalled()
+        {
+            // Arrange
+            var controller = new ProjectController(_repository.Object);
+            var createVM = new ProjectCreateViewModel()
+            {
+                ProjectTitle = "Title",
+                ProjectDescription = "Description",
+                Active = true,
+                Open = true,
+                Deadline = DateTime.Now
+            };
+
+            // Act
+            await controller.Create(createVM);
+
+            // Assert
+            _repository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<IPrincipal>()), Times.Exactly(1));
+        }
+
+        
     }
 }
