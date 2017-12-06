@@ -14,5 +14,7 @@ namespace HiN_Ventures.Models
         public bool Active { get; set; }
         public bool Primary { get; set; }
         public DateTime? RegDate { get; set; }
+        public virtual IEnumerable<BitCoinAddress> AllBitcoinAddresses { get; set; }
+
     }
 }

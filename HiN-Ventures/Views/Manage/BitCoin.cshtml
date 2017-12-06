@@ -12,6 +12,13 @@
     <div class="col-md-4">
         <form asp-action="View">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+ 
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="BitCoinAddress" class="control-label"></label>
                 <input asp-for="BitCoinAddress" class="form-control" />
@@ -24,9 +31,41 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BitCoinAddress)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AllBitcoinAddresses)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+
+                    <td>
+                        <a asp-action="SetPrimary" asp-route-id="@item.BitCoinAddressId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.BitCoinAddressId">Delete</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

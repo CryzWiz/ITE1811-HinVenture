@@ -56,7 +56,7 @@ namespace HiN_Ventures.Models
         private static async Task CreateAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a admin
-            DateTime regdate = new DateTime();
+            DateTime regdate = DateTime.Now;
             var admin = new ApplicationUser
             {
                 UserName = "admin@test.com",
@@ -88,7 +88,7 @@ namespace HiN_Ventures.Models
         private static async Task CreateFreelanceAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a freelance
-            DateTime regDate = new DateTime();
+            DateTime regDate = DateTime.Now;
             var freelance = new ApplicationUser
             {
                 UserName = "freelance@test.com",
@@ -132,7 +132,7 @@ namespace HiN_Ventures.Models
         private static async Task CreateKlientAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
             // Add a klient
-            DateTime regDate = new DateTime();
+            DateTime regDate = DateTime.Now;
             var klient = new ApplicationUser
             {
                 UserName = "klient@test.com",
