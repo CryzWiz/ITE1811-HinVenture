@@ -17,6 +17,8 @@ namespace HiN_Ventures.Models.ProjectViewModels
         [Required]
         public string ProjectDescription { get; set; }
 
+        public string ClientId { get; set; }
+
         [Display(Name = "Project is active")]
         public bool Active { get; set; }
         public bool Open { get; set; }
@@ -25,7 +27,7 @@ namespace HiN_Ventures.Models.ProjectViewModels
 
         // Freelancers
         public List<FreelancerInfo> Freelancers { get; set; }
-        public string FreelanceId { get; set; }
+        public FreelancerInfo Freelancer { get; set; }
 
     }
 }

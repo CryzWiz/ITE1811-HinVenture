@@ -76,7 +76,19 @@ namespace HiN_Ventures.Models
         public async Task<ProjectUpdateViewModel> GetProjectUpdateVMAsync(int id)
         {
             Project project = await GetByIdAsync(id);
-            ProjectUpdateViewModel viewModel = new ProjectUpdateViewModel();
+            // TODO: Hent ut freelancer som er knyttet til prosjektet
+            // Hent ut en liste over alle tilgjengelige freelancere
+            ProjectUpdateViewModel viewModel = new ProjectUpdateViewModel
+            {
+                ProjectId = project.ProjectId,
+                ClientId = project.ClientId,
+                ProjectTitle = project.ProjectTitle,
+                ProjectDescription = project.ProjectDescription,
+                Active = project.Active,
+                Open = project.Open,
+                Complete = project.Complete,
+                Deadline = project.Deadline
+            };
 
             // TODO FULLFØR DENNE!!!
             return viewModel;

@@ -67,6 +67,7 @@ namespace HiN_Ventures.Controllers
             bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
             if(!userIsClient)
             {
+                // TODO: Finn ut hvor det skal redirectes til
                 return RedirectToAction("Index", "Home");
             } 
             ProjectUpdateViewModel viewModel = await _repository.GetProjectUpdateVMAsync((int)id);
@@ -83,11 +84,36 @@ namespace HiN_Ventures.Controllers
         {
             if (ModelState.IsValid)
             {
-                Project project = new Project();
+                /*bool userIsClient = await _repository.UserIsClientAsync(viewModel.ProjectId, User);
+                if (!userIsClient)
+                {
+                    // TODO: Finn ut hvor det skal redirectes til
+                    return RedirectToAction("Index", "Home");
+                }*/
+                Project project = new Project()
+                {
+                    ProjectId = viewModel.ProjectId,
+                    ClientId = "test",
+                    ProjectTitle = viewModel.ProjectTitle,
+                    ProjectDescription = viewModel.ProjectDescription,
+                    Active = viewModel.Active,
+                    Open = viewModel.Open,
+                    Complete = viewModel.Complete,
+                    Deadline = viewModel.Deadline,
+                    FreelanceId = viewModel.Freelancer.UserId
+                };
+                string test = "test";
                 await _repository.UpdateAsync(project, User);
+                return RedirectToAction("Read", "Project");
             }
-
+            // If we get here, something was wrong with the model
             return View(viewModel);
+        }
+
+        public IActionResult Read(int id)
+        {
+            // TODO: Denne må gjøres
+            return View(new Project());
         }
 
         public async Task<IActionResult> GetAll()
