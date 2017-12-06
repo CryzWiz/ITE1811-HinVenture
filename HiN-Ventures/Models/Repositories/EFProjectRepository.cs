@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using HiN_Ventures.Models.ProjectViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace HiN_Ventures.Models
 {
@@ -44,16 +45,16 @@ namespace HiN_Ventures.Models
 
         public async Task UpdateAsync(Project project, IPrincipal user)
         {
-            var currentUser = await _userManager.FindByNameAsync(user.Identity.Name);
-            Project update = GetById(project.ProjectId);
-            if((currentUser.Id).Equals(project.ClientId))
+            if (await UserIsClientAsync(project.ProjectId, user))
             {
-                if(update != null)
+                Project updatedProject = await GetByIdAsync(project.ProjectId);
+                if (updatedProject != null)
                 {
                     // TODO: legg inn noen if() her!
-                    _db.Projects.Update(update);
-               
-                } else
+                    await Task.Run(() => _db.Projects.Update(updatedProject));
+                    await _db.SaveChangesAsync();
+                }
+                else
                 {
                     throw new Exception("Update project: project was not found");
                 }
@@ -65,9 +66,8 @@ namespace HiN_Ventures.Models
 
         public async Task<bool> UserIsClientAsync(int projectId, IPrincipal user)
         {
-            var currentUser = _userManager.FindByNameAsync(user.Identity.Name);
+            var currentUser = await _userManager.FindByNameAsync(user.Identity.Name);
             Project project = await GetByIdAsync(projectId);
-            await currentUser; // TODO: SJEKK OM DETTE FUNGERER!
             if ((currentUser.Id).Equals(project.ClientId))
                 return true;
             return false;
