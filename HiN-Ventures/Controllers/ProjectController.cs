@@ -84,25 +84,22 @@ namespace HiN_Ventures.Controllers
         {
             if (ModelState.IsValid)
             {
-                /*bool userIsClient = await _repository.UserIsClientAsync(viewModel.ProjectId, User);
+                bool userIsClient = await _repository.UserIsClientAsync(viewModel.ProjectId, User);
                 if (!userIsClient)
                 {
                     // TODO: Finn ut hvor det skal redirectes til
                     return RedirectToAction("Index", "Home");
-                }*/
-                Project project = new Project()
+                }
+                Project project = new Project
                 {
                     ProjectId = viewModel.ProjectId,
-                    ClientId = "test",
                     ProjectTitle = viewModel.ProjectTitle,
                     ProjectDescription = viewModel.ProjectDescription,
                     Active = viewModel.Active,
                     Open = viewModel.Open,
                     Complete = viewModel.Complete,
-                    Deadline = viewModel.Deadline,
-                    FreelanceId = viewModel.Freelancer.UserId
-                };
-                string test = "test";
+                    Deadline = viewModel.Deadline
+                }; 
                 await _repository.UpdateAsync(project, User);
                 return RedirectToAction("Read", "Project");
             }
