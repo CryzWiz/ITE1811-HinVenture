@@ -35,26 +35,58 @@ namespace HiN_Ventures.Controllers
         [Authorize]
         public async Task<IActionResult> Create(
             [Bind("ProjectTitle, ProjectDescription, Active, Open, Deadline")]
-            ProjectCreateViewModel vm)
+            ProjectCreateViewModel viewModel)
         {
             if(ModelState.IsValid)
             {
                 Project project = new Project
                 {
-                    ProjectTitle = vm.ProjectTitle,
-                    ProjectDescription = vm.ProjectDescription,
-                    Active = vm.Active,
-                    Open = vm.Open,
-                    Deadline = vm.Deadline
+                    ProjectTitle = viewModel.ProjectTitle,
+                    ProjectDescription = viewModel.ProjectDescription,
+                    Active = viewModel.Active,
+                    Open = viewModel.Open,
+                    Deadline = viewModel.Deadline
                 };
 
                 await _repository.AddAsync(project, User);
-                TempData["success"] = string.Format("Prosjektet: - {0} - har blitt opprettet", project.ProjectTitle);
+                //TempData["success"] = string.Format("Prosjektet: - {0} - har blitt opprettet", project.ProjectTitle);
                 return RedirectToAction("Index", "Home");
             }
-
             // If we get here, something went wrong
-            return View(vm);
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Update(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound("Bad parameter");
+            }
+            bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
+            
+            if(!userIsClient)
+            {
+                return RedirectToAction("Index", "Home");
+            } 
+            ProjectUpdateViewModel viewModel = new ProjectUpdateViewModel();
+            Project project = await _repository.GetByIdAsync((int)id);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Update(ProjectUpdateViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Project project = new Project();
+                await _repository.UpdateAsync(project, User);
+            }
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> GetAll()

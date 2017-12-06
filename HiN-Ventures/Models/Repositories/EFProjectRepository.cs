@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using HiN_Ventures.Models.ProjectViewModels;
 
 namespace HiN_Ventures.Models
 {
@@ -34,7 +35,52 @@ namespace HiN_Ventures.Models
         public Project GetById(int id)
         {
             return _db.Projects.Where(x => x.ProjectId == id).FirstOrDefault();
-        }        
+        }
+
+        public async Task<Project> GetByIdAsync(int id)
+        {
+            return await Task.Run(() => GetById(id));
+        }
+
+        public async Task UpdateAsync(Project project, IPrincipal user)
+        {
+            var currentUser = await _userManager.FindByNameAsync(user.Identity.Name);
+            Project update = GetById(project.ProjectId);
+            if((currentUser.Id).Equals(project.ClientId))
+            {
+                if(update != null)
+                {
+                    // TODO: legg inn noen if() her!
+                    _db.Projects.Update(update);
+               
+                } else
+                {
+                    throw new Exception("Update project: project was not found");
+                }
+            } else
+            {
+                throw new Exception("Update project: User does not have access to this project");
+            }
+        }
+
+        public async Task<bool> UserIsClientAsync(int projectId, IPrincipal user)
+        {
+            var currentUser = _userManager.FindByNameAsync(user.Identity.Name);
+            Project project = await GetByIdAsync(projectId);
+            await currentUser; // TODO: SJEKK OM DETTE FUNGERER!
+            if ((currentUser.Id).Equals(project.ClientId))
+                return true;
+            return false;
+        }
+
+        public async Task<ProjectUpdateViewModel> GetProjectUpdateVMAsync(int id)
+        {
+            Project project = await GetByIdAsync(id);
+            ProjectUpdateViewModel viewModel = new ProjectUpdateViewModel();
+
+            // TODO FULLFØR DENNE!!!
+            return viewModel;
+        }
 
         
     }

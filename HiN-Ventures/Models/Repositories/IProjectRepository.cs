@@ -1,6 +1,8 @@
-﻿using System;
+﻿using HiN_Ventures.Models.ProjectViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
@@ -12,5 +14,9 @@ namespace HiN_Ventures.Models
         Task AddAsync(Project project, IPrincipal user);
 
         Project GetById(int id);
+        Task<Project> GetByIdAsync(int id);
+        Task UpdateAsync(Project project, IPrincipal user);
+        Task<bool> UserIsClientAsync(int projectId, IPrincipal user);
+        Task<ProjectUpdateViewModel> GetProjectUpdateVMAsync(int id);
     }
 }
