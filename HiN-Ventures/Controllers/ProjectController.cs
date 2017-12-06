@@ -39,20 +39,17 @@ namespace HiN_Ventures.Controllers
         {
             if(ModelState.IsValid)
             {
-                IPrincipal user = User;
-
                 Project project = new Project
                 {
-              
                     ProjectTitle = vm.ProjectTitle,
                     ProjectDescription = vm.ProjectDescription,
                     Active = vm.Active,
                     Open = vm.Open,
                     Deadline = vm.Deadline
-
                 };
 
                 await _repository.AddAsync(project, User);
+                TempData["success"] = string.Format("Prosjektet: - {0} - har blitt opprettet", project.ProjectTitle);
                 return RedirectToAction("Index", "Home");
             }
 

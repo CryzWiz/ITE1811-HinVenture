@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using HiN_Ventures.Data;
 using HiN_Ventures.Models;
 using HiN_Ventures.Services;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HiN_Ventures
 {
@@ -38,6 +39,7 @@ namespace HiN_Ventures
             services.AddTransient<IProjectRepository, EFProjectRepository>();
 
             services.AddMvc();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

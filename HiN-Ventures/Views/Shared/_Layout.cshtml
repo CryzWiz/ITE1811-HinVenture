@@ -39,7 +39,22 @@
         </div>
     </nav>
     <div class="container body-content">
+        @if (TempData["success"] != null) { 
+            <div class="alert alert-success"> 
+                <button type="button" class="close" data-dismiss="alert">x</button> 
+                @TempData["success"] 
+            </div> 
+        }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                @TempData["error"]
+            </div>
+        }
         @RenderBody()
+
+
         <hr />
         <footer>
             <p>&copy; 2017 - HiN_Ventures</p>

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using HiN_Ventures.Models.ProjectViewModels;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HiN_Ventures_UnitTests
 {
@@ -18,6 +19,7 @@ namespace HiN_Ventures_UnitTests
     {
         Mock<IProjectRepository> _repository;
         List<Project> _fakeProjects;
+        ProjectCreateViewModel _fakeProjectCreateVM;
 
         [TestInitialize]
         public void Setup()
@@ -29,7 +31,16 @@ namespace HiN_Ventures_UnitTests
                 new Project { ProjectTitle = "Tittel2", ProjectDescription = "Beskrivelse2" },
                 new Project { ProjectTitle = "Tittel3", ProjectDescription = "Beskrivelse3" },
             };
-            
+
+            _fakeProjectCreateVM = new ProjectCreateViewModel()
+            {
+                ProjectTitle = "Title",
+                ProjectDescription = "Description",
+                Active = true,
+                Open = true,
+                Deadline = DateTime.Now
+            };
+
         }
 
 
@@ -114,21 +125,28 @@ namespace HiN_Ventures_UnitTests
         {
             // Arrange
             var controller = new ProjectController(_repository.Object);
-            var createVM = new ProjectCreateViewModel()
-            {
-                ProjectTitle = "Title",
-                ProjectDescription = "Description",
-                Active = true,
-                Open = true,
-                Deadline = DateTime.Now
-            };
 
             // Act
-            await controller.Create(createVM);
+            await controller.Create(_fakeProjectCreateVM);
 
             // Assert
             _repository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<IPrincipal>()), Times.Exactly(1));
         }
+
+        /*[TestMethod]
+        public async Task CreatePost_SetsTempDataSuccessBeforeRedirect()
+        {
+            // Arrange
+            var controller = new ProjectController(_repository.Object);
+            var tempData = new Mock<TempDataDictionary>();
+            controller.TempData = tempData.Object;
+
+            // Act
+            await controller.Create(_fakeProjectCreateVM);
+
+            // Assert
+            Assert.IsNotNull(controller.TempData);
+        }*/
 
         
     }
