@@ -9,6 +9,10 @@ namespace HiN_Ventures.Models.ManageViewModels
     {
         public string BitCoinAddress { get; set; }
 
+        public string Name { get; set; }
+
+        public virtual IEnumerable<BitCoinAddress> AllBitcoinAddresses { get; set; }
+
         public string StatusMessage { get; set; }
     }
 }

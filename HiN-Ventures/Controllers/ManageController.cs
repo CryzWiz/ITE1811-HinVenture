@@ -256,8 +256,10 @@ namespace HiN_Ventures.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
-            var model = new BitCoinViewModel { StatusMessage = StatusMessage/*, BitCoinAddress = user.BitCoinAddress */};
+            
+            List<BitCoinAddress> ourList = _context.BitCoinAddress.ToList().FindAll(x => x.UserId == user.Id);
+            BitCoinAddress f = ourList.FirstOrDefault(X => X.Primary == true);
+            var model = new BitCoinViewModel { StatusMessage = StatusMessage, BitCoinAddress = f.Address, Name = f.Name, AllBitcoinAddresses = ourList };
 
             return View(model);
 
