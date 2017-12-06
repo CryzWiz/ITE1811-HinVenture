@@ -65,14 +65,15 @@ namespace HiN_Ventures.Controllers
                 return NotFound("Bad parameter");
             }
             bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
-            
             if(!userIsClient)
             {
                 return RedirectToAction("Index", "Home");
             } 
-            ProjectUpdateViewModel viewModel = new ProjectUpdateViewModel();
-            Project project = await _repository.GetByIdAsync((int)id);
-
+            ProjectUpdateViewModel viewModel = await _repository.GetProjectUpdateVMAsync((int)id);
+            if(viewModel == null)
+            {
+                return NotFound("Project was not found");
+            }
             return View(viewModel);
         }
 

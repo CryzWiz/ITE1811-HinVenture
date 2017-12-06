@@ -138,6 +138,7 @@ namespace HiN_Ventures_UnitTests
         {
             // Arrange
             _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
+            _repository.Setup(x => x.GetProjectUpdateVMAsync(1)).Returns(Task.FromResult<ProjectUpdateViewModel>(new ProjectUpdateViewModel()));
             var controller = new ProjectController(_repository.Object);
 
             // Act
@@ -148,6 +149,8 @@ namespace HiN_Ventures_UnitTests
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             var projectViewModel = result.ViewData.Model as ProjectUpdateViewModel;
             Assert.IsInstanceOfType(projectViewModel, typeof(ProjectUpdateViewModel));
+            _repository.Verify(x => x.GetProjectUpdateVMAsync(1), Times.Exactly(1));
+            _repository.VerifyAll();
         }
 
         [TestMethod]
@@ -167,22 +170,6 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task UpdateGet_GetProjectUpdateVMAsyncIsCalledInRepository()
-        {
-            // Arrange
-            _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(false));
-            var controller = new ProjectController(_repository.Object);
-
-            // Act
-            await controller.Update(1);
-
-            // Assert
-            _repository.Verify(x => x.GetProjectUpdateVMAsync(1), Times.Exactly(1));
-            _repository.VerifyAll();
-
-        }
-
-        [TestMethod]
         public async Task UpdatePost_UpdateAsyncIsCalled()
         {
             // Arrange
@@ -197,7 +184,23 @@ namespace HiN_Ventures_UnitTests
 
         }
 
-        
+        [TestMethod]
+        public async Task UpdatePost_ReturnsNotFoundIfViewModelIsNull()
+        {
+            // Arrange
+            _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
+            _repository.Setup(x => x.GetProjectUpdateVMAsync(1)).Returns(Task.FromResult<ProjectUpdateViewModel>(null));
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.Update(1);
+
+            // Assert
+            Assert.IsNotNull(result, "View Result is null");
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
+
 
 
 
