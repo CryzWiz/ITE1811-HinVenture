@@ -98,7 +98,16 @@ else if (User.IsInRole("Klient"))
     </div>
 
 }
+else if (User.IsInRole("Senior"))
+{
 
+    <p>To be added.... Senior</p>
+}
+else if (User.IsInRole("Administrator"))
+{
+
+    <p>To be added.... Administrator</p>
+}
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
