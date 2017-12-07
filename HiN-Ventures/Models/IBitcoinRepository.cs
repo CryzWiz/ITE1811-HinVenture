@@ -7,9 +7,9 @@ namespace HiN_Ventures.Models
 {
     public interface IBitcoinRepository
     {
-        Task<IEnumerable<BitCoinAddress>> GetAllAddresses(string UserId);
-        Task<BitCoinAddress> GetPrimaryAddress(string UserId);
-        Task<BitCoinAddress> GetAddressByName(string Name);
+        Task<IEnumerable<BitCoinAddress>> GetAllAddressesAsync();
+        Task<BitCoinAddress> GetPrimaryAddressAsync(string UserId);
+        Task<BitCoinAddress> GetAddressByNameAsync(string Name);
         Task AddAddresseAsync(BitCoinAddress bitcoinAddress);
     }
 }

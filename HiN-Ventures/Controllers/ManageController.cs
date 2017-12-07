@@ -256,12 +256,28 @@ namespace HiN_Ventures.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            
-            List<BitCoinAddress> ourList = _context.BitCoinAddress.ToList().FindAll(x => x.UserId == user.Id);
-            BitCoinAddress f = ourList.FirstOrDefault(X => X.Primary == true);
+            EFPBitcoinRepository _repository = new EFPBitcoinRepository(_context);
+            var ourList = _repository.GetAddressByUserId(user.Id);
+            BitCoinAddress f = await _repository.GetPrimaryAddressAsync(user.Id);
             var model = new BitCoinViewModel { StatusMessage = StatusMessage, BitCoinAddress = f.Address, Name = f.Name, AllBitcoinAddresses = ourList };
 
             return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBitcoin()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetBitcoinAsPrimary()
+        {
+            throw new NotImplementedException();
 
         }
 

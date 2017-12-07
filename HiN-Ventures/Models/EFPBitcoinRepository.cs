@@ -21,24 +21,30 @@ namespace HiN_Ventures.Models
             await _db.SaveChangesAsync();
         }
 
-        public Task<BitCoinAddress> GetAddressByUserId(string UserId)
+        public IEnumerable<BitCoinAddress> GetAddressByUserId(string UserId)
         {
-            throw new NotImplementedException();
+            var ourList = _db.BitCoinAddress.ToList().FindAll(x => x.UserId == UserId);
+            return ourList;
         }
 
-        public Task<BitCoinAddress> GetAddressByName(string Name)
+        public Task<BitCoinAddress> GetAddressByNameAsync(string Name)
         {
-            throw new NotImplementedException();
+            var adresse = Task.Run(() => _db.BitCoinAddress.ToList().FirstOrDefault(x => x.Name == Name));
+            return adresse;
         }
 
-        public Task<IEnumerable<BitCoinAddress>> GetAllAddresses(string UserId)
+        public async Task<IEnumerable<BitCoinAddress>> GetAllAddressesAsync()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() => _db.BitCoinAddress.ToList());
         }
 
-        public Task<BitCoinAddress> GetPrimaryAddress(string UserId)
+        public async Task<BitCoinAddress> GetPrimaryAddressAsync(string UserId)
         {
-            throw new NotImplementedException();
+            var list = await Task.Run(() => _db.BitCoinAddress.ToList().FindAll(x => x.UserId == UserId));
+            BitCoinAddress primary = list.FirstOrDefault(x => x.Primary == true);
+            return primary;
+
         }
+
     }
 }
