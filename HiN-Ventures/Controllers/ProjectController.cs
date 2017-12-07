@@ -107,10 +107,24 @@ namespace HiN_Ventures.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Read(int id)
+        [HttpGet]
+        public async Task<IActionResult> Read(int? id)
         {
-            // TODO: Denne må gjøres
-            return View(new Project());
+            if (id == null)
+            {
+                return NotFound("Bad parameter");
+            }
+
+            // TODO: Bytt ut med ProjectReadVMAsync()
+            Project project = await _repository.GetByIdAsync((int)id);
+            if(project == null)
+            {
+                // TempData["error"] = "Kunne ikke finne valgt prosjekt";
+                return RedirectToAction("Index", "Project");
+            }
+
+            
+            return View(project);
         }
 
         public async Task<IActionResult> GetAll()

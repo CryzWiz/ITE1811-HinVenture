@@ -83,7 +83,7 @@ namespace HiN_Ventures_UnitTests
             Assert.AreEqual(_fakeProjects, projects);
         }
 
-        public async Task Index_ReturnsAllOpenProjects()
+        public async Task Index_ReturnsAllOpenAndActiveProjects()
         {
 
         }
@@ -238,7 +238,60 @@ namespace HiN_Ventures_UnitTests
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
 
+        [TestMethod]
+        public async Task ReadGet_ReturnsCorrectProject()
+        {
+            // Arrange
 
+            
+            _repository.Setup(x => x.GetByIdAsync(1)).Returns(Task.FromResult<Project>(_fakeProjects[0]));
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.Read(1) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result, "View Result is null");
+            var project = result.ViewData.Model as ProjectReadViewModel;
+            Assert.IsInstanceOfType(project, typeof(ProjectReadViewModel));
+            Assert.AreEqual(project, _fakeProjects[0]);
+        }
+
+        [TestMethod]
+        public async Task ReadGet_RedirectsIfProjectWasNotFound()
+        {
+            // Arrange
+
+            // Bytt ut med ProjectReadVMAsync(1)
+            _repository.Setup(x => x.GetByIdAsync(1)).Returns(Task.FromResult<Project>(null));
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.Read(1) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result, "Redirect result is null");
+
+            // Bytt ut med ProjectReadVMAsync(1)
+            _repository.Verify(x => x.GetByIdAsync(1), Times.Exactly(1));
+            Assert.AreEqual("Index", result.ActionName as String);
+            Assert.AreEqual("Project", result.ControllerName as String);
+        }
+
+        [TestMethod]
+        public async Task ReadGet_ReturnsNotFoundIfIdIsNull()
+        {
+            // Arrange
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            int? id = null;
+            var result = await controller.Read(id);
+
+            // Assert
+            Assert.IsNotNull(result, "View Result is null");
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
 
 
 

@@ -18,5 +18,8 @@ namespace HiN_Ventures.Models
         Task UpdateAsync(Project project, IPrincipal user);
         Task<bool> UserIsClientAsync(int projectId, IPrincipal user);
         Task<ProjectUpdateViewModel> GetProjectUpdateVMAsync(int id);
+        Task<ProjectReadViewModel> GetProjectReadVMAsync(int id);
+
+        
     }
 }

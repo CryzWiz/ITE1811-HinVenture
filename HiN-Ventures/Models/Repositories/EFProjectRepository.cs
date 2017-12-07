@@ -94,6 +94,9 @@ namespace HiN_Ventures.Models
             return viewModel;
         }
 
-        
+        public Task<ProjectReadViewModel> GetProjectReadVMAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
