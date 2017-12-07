@@ -265,11 +265,15 @@ namespace HiN_Ventures.Controllers
 
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteBitcoin()
+
+        public async Task<IActionResult> DeleteBitcoin(int id)
         {
-            throw new NotImplementedException();
+            EFPBitcoinRepository _repository = new EFPBitcoinRepository(_context);
+            
+            
+                await _repository.DeleteAddress(id);
+                return RedirectToAction("Bitcoin");
+            
 
         }
 
@@ -279,6 +283,39 @@ namespace HiN_Ventures.Controllers
         {
             throw new NotImplementedException();
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterBitcoin([Bind("Name, BitCoinAddress")]BitCoinViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+
+            EFPBitcoinRepository _repository = new EFPBitcoinRepository(_context);
+
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                }
+                DateTime time = DateTime.Now;
+                BitCoinAddress x = new BitCoinAddress
+                {
+                    Name = model.Name,
+                    Address = model.BitCoinAddress,
+                    UserId = user.Id,
+                    Active = true,
+                    Primary = false,
+                    RegDate = time
+                };
+
+                await _repository.AddAddressAsync(x);
+
+                return RedirectToAction("Bitcoin");
+            }
+            return View(model);
         }
 
         [HttpGet]

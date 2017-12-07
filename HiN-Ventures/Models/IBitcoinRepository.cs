@@ -10,6 +10,8 @@ namespace HiN_Ventures.Models
         Task<IEnumerable<BitCoinAddress>> GetAllAddressesAsync();
         Task<BitCoinAddress> GetPrimaryAddressAsync(string UserId);
         Task<BitCoinAddress> GetAddressByNameAsync(string Name);
-        Task AddAddresseAsync(BitCoinAddress bitcoinAddress);
+        Task AddAddressAsync(BitCoinAddress bitcoinAddress);
+        Task DeleteAddress(int addressId);
+
     }
 }

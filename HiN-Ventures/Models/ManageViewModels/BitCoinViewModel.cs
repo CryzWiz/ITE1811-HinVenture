@@ -11,6 +11,10 @@ namespace HiN_Ventures.Models.ManageViewModels
 
         public string Name { get; set; }
 
+        public DateTime RegDate { get; set; }
+
+        public bool Primary { get; set; }
+
         public virtual IEnumerable<BitCoinAddress> AllBitcoinAddresses { get; set; }
 
         public string StatusMessage { get; set; }

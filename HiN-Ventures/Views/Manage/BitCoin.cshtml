@@ -9,11 +9,16 @@
 @Html.Partial("_StatusMessage", Model.StatusMessage)
 
 <div class="row">
-    <p>Primary address:</p>
+
+    <p>This field is prefilled with your primary key. But you can use the same fields to save a new key.</p>
+    <p>This way is NOT optional, but is put like this just to make it easy in the project. Should be 2 different fields.</p>
+    <p>THAT MEANS THAT IF YOU HIT SAVE WITHOUT CHANGES YOULL SAVE A DUPLICATE - NO CHECKS IMPLEMENTED FOR DUPLICATES</p>
+
     <div class="col-md-4">
-        <form asp-action="View">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
- 
+        <form asp-action="RegisterBitcoin" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -33,6 +38,7 @@
 </div>
 
 <div class="row">
+    <p>All bitcoin addresses this user have stored:</p>
     <table class="table">
         <thead>
             <tr>
@@ -42,7 +48,13 @@
                 <th>
                     @Html.DisplayNameFor(model => model.BitCoinAddress)
                 </th>
-                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Primary)
+                </th>
+                <th>Options</th>
             </tr>
         </thead>
         <tbody>
@@ -55,10 +67,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Address)
                     </td>
-
                     <td>
-                        <a asp-action="SetPrimary" asp-route-id="@item.BitCoinAddressId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.BitCoinAddressId">Delete</a>
+                        @Html.DisplayFor(modelItem => item.RegDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Primary)
+                    </td>
+                    <td>
+                        <a asp-action="DeleteBitcoin" asp-route-id="@item.BitCoinAddressId">Delete</a>
                     </td>
 
                 </tr>

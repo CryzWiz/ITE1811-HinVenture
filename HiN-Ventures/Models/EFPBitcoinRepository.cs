@@ -15,7 +15,7 @@ namespace HiN_Ventures.Models
             _db = db;
         }
 
-        public async Task AddAddresseAsync(BitCoinAddress bitcoinAddress)
+        public async Task AddAddressAsync(BitCoinAddress bitcoinAddress)
         {
             await Task.Run(() => _db.BitCoinAddress.Add(bitcoinAddress));
             await _db.SaveChangesAsync();
@@ -46,5 +46,13 @@ namespace HiN_Ventures.Models
 
         }
 
+        public async Task DeleteAddress(int id)
+        {
+            var address = (from a in _db.BitCoinAddress
+                        where a.BitCoinAddressId == id
+                        select a).FirstOrDefault();
+            await Task.Run(() => _db.BitCoinAddress.Remove(address));
+            await Task.Run(() => _db.SaveChanges());
+        }
     }
 }
