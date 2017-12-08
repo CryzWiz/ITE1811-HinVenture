@@ -111,20 +111,20 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task CreatePost_AddAsyncIsCalled()
+        public async Task Save_AddAsyncIsCalled()
         {
             // Arrange
             var controller = new ProjectController(_repository.Object);
 
             // Act
-            await controller.Create(_fakeProjectCreateVM);
+            await controller.Save(_fakeProjectCreateVM);
 
             // Assert
             _repository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<IPrincipal>()), Times.Exactly(1));
         }
 
         [TestMethod]
-        public void CreateGet_ReturnsView()
+        public void Create_ReturnsView()
         {
             // Arrange
             var controller = new ProjectController(_repository.Object);
@@ -138,14 +138,14 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task UpdateGet_ReturnsNotFoundWhenIdIsNull()
+        public async Task Edit_ReturnsNotFoundWhenIdIsNull()
         {
             // Arrange
             var controller = new ProjectController(_repository.Object);
 
             // Act
             int? id = null;
-            var result = await controller.Update(id);
+            var result = await controller.Edit(id);
 
             // Assert
             Assert.IsNotNull(result, "View Result is null");
@@ -153,7 +153,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task UpdateGet_ReturnsCorrectViewModel()
+        public async Task Edit_ReturnsCorrectViewModel()
         {
             // Arrange
             _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
@@ -161,7 +161,7 @@ namespace HiN_Ventures_UnitTests
             var controller = new ProjectController(_repository.Object);
 
             // Act
-            var result = await controller.Update(1) as ViewResult;
+            var result = await controller.Edit(1) as ViewResult;
             
             // Assert
             Assert.IsNotNull(result);
@@ -173,14 +173,14 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task UpdateGet_RedirectsIfUserIsNotClient()
+        public async Task Edit_RedirectsIfUserIsNotClient()
         {
             // Arrange
             _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(false));
             var controller = new ProjectController(_repository.Object);
 
             // Act
-            var result = await controller.Update(1) as RedirectToActionResult;
+            var result = await controller.Edit(1) as RedirectToActionResult;
 
             // Assert
             Assert.IsNotNull(result, "Redirect result is null");
@@ -189,7 +189,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task UpdatePost_UpdateAsyncIsCalled()
+        public async Task Update_UpdateAsyncIsCalled()
         {
             // Arrange
             _repository.Setup(x => x.UserIsClientAsync(_fakeProjectUpdateVM.ProjectId, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
@@ -223,7 +223,7 @@ namespace HiN_Ventures_UnitTests
         }*/
 
         [TestMethod]
-        public async Task UpdatePost_RedirectsIfUserIsNotClient()
+        public async Task Update_RedirectsIfUserIsNotClient()
         {
             // Arrange
             _repository.Setup(x => x.UserIsClientAsync(_fakeProjectUpdateVM.ProjectId, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(false));
@@ -240,7 +240,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task UpdatePost_ReturnsNotFoundIfViewModelIsNull()
+        public async Task Edit_ReturnsNotFoundIfViewModelIsNull()
         {
             // Arrange
             _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
@@ -248,7 +248,7 @@ namespace HiN_Ventures_UnitTests
             var controller = new ProjectController(_repository.Object);
 
             // Act
-            var result = await controller.Update(1);
+            var result = await controller.Edit(1);
 
             // Assert
             Assert.IsNotNull(result, "View Result is null");
@@ -256,7 +256,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task ReadGet_ReturnsCorrectProject()
+        public async Task Read_ReturnsCorrectProject()
         {
             // Arrange
             _repository.Setup(x => x.GetProjectReadVMAsync(1)).Returns(Task.FromResult<ProjectReadViewModel>(_fakeProjectReadVM));
@@ -273,7 +273,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task ReadGet_RedirectsIfProjectWasNotFound()
+        public async Task Read_RedirectsIfProjectWasNotFound()
         {
             // Arrange
             _repository.Setup(x => x.GetProjectReadVMAsync(1)).Returns(Task.FromResult<ProjectReadViewModel>(null));
@@ -290,7 +290,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task ReadGet_RedirectsIfRepositoryThrowsException()
+        public async Task Read_RedirectsIfRepositoryThrowsException()
         {
             // Arrange
             _repository.Setup(x => x.GetProjectReadVMAsync(1)).Throws(new Exception());
@@ -307,7 +307,7 @@ namespace HiN_Ventures_UnitTests
         }
 
         [TestMethod]
-        public async Task ReadGet_ReturnsNotFoundIfIdIsNull()
+        public async Task Read_ReturnsNotFoundIfIdIsNull()
         {
             // Arrange
             var controller = new ProjectController(_repository.Object);

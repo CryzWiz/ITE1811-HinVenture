@@ -33,7 +33,7 @@ namespace HiN_Ventures.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create(
+        public async Task<IActionResult> Save(
             [Bind("ProjectTitle, ProjectDescription, Active, Open, Deadline")]
             ProjectCreateViewModel viewModel)
         {
@@ -56,7 +56,7 @@ namespace HiN_Ventures.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
+       /* [HttpGet]
         [Authorize]
         public async Task<IActionResult> Update(int? id)
         {
@@ -72,6 +72,28 @@ namespace HiN_Ventures.Controllers
             } 
             ProjectUpdateViewModel viewModel = await _repository.GetProjectUpdateVMAsync((int)id);
             if(viewModel == null)
+            {
+                return NotFound("Project was not found");
+            }
+            return View(viewModel);
+        }*/
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound("Bad parameter");
+            }
+            bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
+            if (!userIsClient)
+            {
+                // TODO: Finn ut hvor det skal redirectes til
+                return RedirectToAction("Index", "Home");
+            }
+            ProjectUpdateViewModel viewModel = await _repository.GetProjectUpdateVMAsync((int)id);
+            if (viewModel == null)
             {
                 return NotFound("Project was not found");
             }
