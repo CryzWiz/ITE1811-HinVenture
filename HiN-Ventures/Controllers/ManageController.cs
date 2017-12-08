@@ -14,6 +14,7 @@ using HiN_Ventures.Models;
 using HiN_Ventures.Models.ManageViewModels;
 using HiN_Ventures.Services;
 using HiN_Ventures.Data;
+using HiN_Ventures.Models.Repositories;
 
 namespace HiN_Ventures.Controllers
 {
@@ -27,6 +28,9 @@ namespace HiN_Ventures.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private EFPBitcoinRepository _bitCoinRepository;
+        private EFPFreelanceRepository _freelanceRepository;
+        private EFPKlientRepository _klientRepository;
 
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -44,6 +48,9 @@ namespace HiN_Ventures.Controllers
             _logger = logger;
             _urlEncoder = urlEncoder;
             _context = context;
+            _freelanceRepository = new EFPFreelanceRepository(_context);
+            _klientRepository = new EFPKlientRepository(_context);
+            _bitCoinRepository = new EFPBitcoinRepository(_context);
         }
 
         [TempData]
@@ -60,8 +67,7 @@ namespace HiN_Ventures.Controllers
 
             if(await _userManager.IsInRoleAsync(user, "Klient"))
             {
-                List<KlientInfo> list = _context.KlientInfo.ToList();
-                KlientInfo k = list.FirstOrDefault(X => X.UserId == user.Id);
+                KlientInfo k = await _klientRepository.GetKlientInfoAsync(user.Id);
                 var fname = k.ToString();
                 var lname = k.OrgNumber;
 
@@ -80,8 +86,7 @@ namespace HiN_Ventures.Controllers
             }
             else if (await _userManager.IsInRoleAsync(user, "Freelance"))
             {
-                List<FreelancerInfo> list = _context.FreelancerInfo.ToList();
-                FreelancerInfo f = list.FirstOrDefault(X => X.UserId == user.Id);
+                FreelancerInfo f = await _freelanceRepository.GetFreelancerInfoAsync(user.Id);
 
                 var model = new IndexViewModel
                 {
@@ -147,33 +152,71 @@ namespace HiN_Ventures.Controllers
                 }
             }
 
-            FreelancerInfo f = await _context.FreelancerInfo.FindAsync(user.Id);
-            
-            var firstname = f.FirstName;
-            if (model.FirstName != firstname)
+            if(await _userManager.IsInRoleAsync(user, "Freelance"))
             {
+                FreelancerInfo f = await _freelanceRepository.GetFreelancerInfoAsync(user.Id);
 
-                f.FirstName = model.FirstName;
-                var setFirstNameResult = await _userManager.UpdateAsync(user);
-                if (!setFirstNameResult.Succeeded)
+                var firstname = f.FirstName;
+                if (model.FirstName != firstname)
                 {
-                    throw new ApplicationException($"Unexpected error occurred setting firstname for user with ID '{user.Id}'.");
-                }
-            }
 
-            var lastname = f.LastName;
-            if (model.LastName != lastname)
+                    f.FirstName = model.FirstName;
+                    var setFirstNameResult = await _userManager.UpdateAsync(user);
+                    if (!setFirstNameResult.Succeeded)
+                    {
+                        throw new ApplicationException($"Unexpected error occurred setting firstname for user with ID '{user.Id}'.");
+                    }
+                }
+
+                var lastname = f.LastName;
+                if (model.LastName != lastname)
+                {
+                    f.LastName = model.LastName;
+                    var setLastNameResult = await _userManager.UpdateAsync(user);
+                    if (!setLastNameResult.Succeeded)
+                    {
+                        throw new ApplicationException($"Unexpected error occurred setting lastname for user with ID '{user.Id}'.");
+                    }
+                }
+                var birtDate = f.BirthDate;
+                if (model.BirthDate != birtDate)
+                {
+                    f.BirthDate = model.BirthDate;
+                    var setBirtDateResult = await _userManager.UpdateAsync(user);
+                    if (!setBirtDateResult.Succeeded)
+                    {
+                        throw new ApplicationException($"Unexpected error occurred setting lastname for user with ID '{user.Id}'.");
+                    }
+                }
+                _freelanceRepository.UpdateFreelancerInfoAsync(f);
+
+                StatusMessage = "Your profile has been updated";
+                return RedirectToAction(nameof(Index));
+            }
+            if(await _userManager.IsInRoleAsync(user, "Klient"))
             {
-                f.LastName = model.LastName;
-                var setLastNameResult = await _userManager.UpdateAsync(user);
-                if (!setLastNameResult.Succeeded)
+                KlientInfo k = await _klientRepository.GetKlientInfoAsync(user.Id);
+                if (k.OrgNumber != model.OrgNumber)
                 {
-                    throw new ApplicationException($"Unexpected error occurred setting lastname for user with ID '{user.Id}'.");
+                    k.OrgNumber = model.OrgNumber;
                 }
+                if (k.CompanyName != model.CompanyName)
+                {
+                    k.CompanyName = model.CompanyName;
+                }
+                if (k.PostAddress != model.PostAddress)
+                {
+                    k.PostAddress = model.PostAddress;
+                }
+                await _klientRepository.UpdateKlientInfoAsync(k);
+                StatusMessage = "Your profile has been updated";
+                return RedirectToAction(nameof(Index));
             }
-
-            StatusMessage = "Your profile has been updated";
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                StatusMessage = "TO BE IMPLEMENTED!";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
