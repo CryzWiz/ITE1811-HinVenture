@@ -22,7 +22,13 @@ namespace HiN_Ventures.Models
 
         public async Task<IEnumerable<Project>> GetAllAsync()
         {
-            return await Task.Run(() => _db.Projects);
+            return await _db.Projects.ToListAsync();
+            //return await Task.Run(() => _db.Projects);
+        }
+
+        public async Task<IEnumerable<Project>> GetAllAsync(bool active, bool open, bool complete)
+        {
+            return await _db.Projects.Where(x => x.Active == active && x.Open == open && x.Complete == complete).ToListAsync();
         }
 
         public async Task AddAsync(Project project, IPrincipal user)
@@ -160,12 +166,6 @@ namespace HiN_Ventures.Models
             {
                 throw new Exception("User is not client");
             }
-        }
-
-
-        public Task<List<Project>> GetAllAsync(bool active = true, bool open = true, bool complete = false)
-        {
-            return _db.Projects.Where(x => x.Active == active && x.Open == open && x.Complete == complete).ToListAsync();
         }
     }
 }

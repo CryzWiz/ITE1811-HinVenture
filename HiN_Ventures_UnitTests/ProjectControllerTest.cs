@@ -19,20 +19,88 @@ namespace HiN_Ventures_UnitTests
     {
         Mock<IProjectRepository> _repository;
         List<Project> _fakeProjects;
+        List<Project> _fakeOpenAndActiveProjects;
+        List<Project> _fakeActiveProjects;
+        List<Project> _fakeCompleteProjects;
         ProjectCreateViewModel _fakeProjectCreateVM;
         ProjectUpdateViewModel _fakeProjectUpdateVM;
         ProjectReadViewModel _fakeProjectReadVM;
+
 
 
         [TestInitialize]
         public void Setup()
         {
             _repository = new Mock<IProjectRepository>();
+
+            _fakeOpenAndActiveProjects = new List<Project>
+            {
+                new Project
+                {
+                ProjectTitle = "Tittel1",
+                ProjectDescription = "Beskrivelse1",
+                Active = true,
+                Open = true,
+                Complete = false
+                },
+                new Project
+                {
+                ProjectTitle = "Tittel3",
+                ProjectDescription = "Beskrivelse3",
+                Active = true,
+                Open = true,
+                Complete = false
+                }
+            };
+
+            _fakeCompleteProjects = new List<Project>
+            {
+                new Project {
+                    ProjectTitle = "Tittel2",
+                    ProjectDescription = "Beskrivelse2",
+                    Active = false,
+                    Open = false,
+                    Complete = false
+                },
+                new Project {
+                    ProjectTitle = "Tittel123",
+                    ProjectDescription = "Beskrivelse222222",
+                    Active = false,
+                    Open = false,
+                    Complete = false
+                }
+            };
+
+            _fakeActiveProjects = new List<Project>
+            {
+                _fakeOpenAndActiveProjects[0],
+                _fakeOpenAndActiveProjects[1],
+                new Project
+                {
+                    ProjectTitle = "Tittel124563",
+                    ProjectDescription = "Beskrivelse2222221111",
+                    Active = true,
+                    Open = false,
+                    Complete = false
+                },
+                new Project
+                {
+                    ProjectTitle = "Tittel123456123",
+                    ProjectDescription = "Beskrivelse222222232323",
+                    Active = true,
+                    Open = false,
+                    Complete = false
+                }
+            };
+
             _fakeProjects = new List<Project>
             {
-                new Project { ProjectTitle = "Tittel1", ProjectDescription = "Beskrivelse1" },
-                new Project { ProjectTitle = "Tittel2", ProjectDescription = "Beskrivelse2" },
-                new Project { ProjectTitle = "Tittel3", ProjectDescription = "Beskrivelse3" },
+                _fakeOpenAndActiveProjects[0],
+                _fakeOpenAndActiveProjects[1],
+                _fakeCompleteProjects[0],
+                _fakeCompleteProjects[1],
+                _fakeActiveProjects[2],
+                _fakeActiveProjects[3]
             };
 
             _fakeProjectCreateVM = new ProjectCreateViewModel()
@@ -43,18 +111,14 @@ namespace HiN_Ventures_UnitTests
                 Open = true,
                 Deadline = DateTime.Now
             };
-
-
-
+            
             var fakeFreelancers = new List<FreelancerInfo>
             {
                 new FreelancerInfo { FirstName = "Ola" },
                 new FreelancerInfo { FirstName = "Normann" }
 
             };
-
             
-
             _fakeProjectUpdateVM = new ProjectUpdateViewModel
             {
                 ProjectId = 1,
@@ -96,7 +160,7 @@ namespace HiN_Ventures_UnitTests
             Assert.IsNotNull(result, "ViewResult is null");
             CollectionAssert.AllItemsAreInstancesOfType((ICollection)result.ViewData.Model, typeof(Project));
             var projects = result.ViewData.Model as List<Project>;
-            Assert.AreEqual(3, projects.Count, "Got wrong number of projects");
+            Assert.AreEqual(_fakeProjects.Count, projects.Count, "Got wrong number of projects");
             Assert.AreEqual(_fakeProjects, projects);
         }
 
@@ -106,6 +170,12 @@ namespace HiN_Ventures_UnitTests
         }
 
         public async Task GetAllActive_ReturnsAllActiveProjects()
+        {
+
+        }
+
+        //[TestMethod]
+        public async Task Index_ReturnsCorrectViewModel()
         {
 
         }
@@ -383,11 +453,7 @@ namespace HiN_Ventures_UnitTests
             Assert.AreEqual("Home", result.ControllerName as String);
         }
 
-        //[TestMethod]
-        public async Task Index_ReturnsCorrectViewModel()
-        {
 
-        }
 
 
         /*[TestMethod]
