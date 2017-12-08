@@ -145,9 +145,21 @@ namespace HiN_Ventures.Models
             }
         }
 
-        public Task RemoveAsync(int id)
+        public async Task RemoveAsync(int id, IPrincipal user) 
         {
-            throw new NotImplementedException();
+            if(await UserIsClientAsync(id, user))
+            {
+                Project project = await GetByIdAsync(id);
+                if(project == null)
+                {
+                    throw new Exception("Project was not found");
+                }
+                await Task.Run(() => _db.Projects.Remove(project));
+                await _db.SaveChangesAsync();
+            } else
+            {
+                throw new Exception("User is not client");
+            }
         }
     }
 }

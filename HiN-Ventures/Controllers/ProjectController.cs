@@ -143,7 +143,7 @@ namespace HiN_Ventures.Controllers
             {
                 try
                 {
-                    await _repository.RemoveAsync((int)id);
+                    await _repository.RemoveAsync((int)id, User);
 
                     //TempData["success"] = string.Format("Prosjekt med id: - {0} - ble slettet", id);
                     return RedirectToAction("Index", "Project");
