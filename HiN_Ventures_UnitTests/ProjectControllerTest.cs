@@ -184,8 +184,8 @@ namespace HiN_Ventures_UnitTests
 
             // Assert
             Assert.IsNotNull(result, "Redirect result is null");
-            Assert.AreEqual("Index", result.ActionName as String);
-            Assert.AreEqual("Home", result.ControllerName as String);
+            Assert.AreEqual("Read", result.ActionName as String);
+            Assert.AreEqual("Project", result.ControllerName as String);
         }
 
         [TestMethod]
@@ -235,7 +235,7 @@ namespace HiN_Ventures_UnitTests
             // Assert
             Assert.IsNotNull(result, "Redirect result is null");
             Assert.AreEqual("Index", result.ActionName as String);
-            Assert.AreEqual("Home", result.ControllerName as String);
+            Assert.AreEqual("Project", result.ControllerName as String);
 
         }
 

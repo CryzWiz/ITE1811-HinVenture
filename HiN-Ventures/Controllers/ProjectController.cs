@@ -56,28 +56,6 @@ namespace HiN_Ventures.Controllers
             return View(viewModel);
         }
 
-       /* [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Update(int? id)
-        {
-            if(id == null)
-            {
-                return NotFound("Bad parameter");
-            }
-            bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
-            if(!userIsClient)
-            {
-                // TODO: Finn ut hvor det skal redirectes til
-                return RedirectToAction("Index", "Home");
-            } 
-            ProjectUpdateViewModel viewModel = await _repository.GetProjectUpdateVMAsync((int)id);
-            if(viewModel == null)
-            {
-                return NotFound("Project was not found");
-            }
-            return View(viewModel);
-        }*/
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
@@ -89,8 +67,8 @@ namespace HiN_Ventures.Controllers
             bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
             if (!userIsClient)
             {
-                // TODO: Finn ut hvor det skal redirectes til
-                return RedirectToAction("Index", "Home");
+                //TempData["error"] = "Du har ikke tillatelse til å endre dette prosjektet.";
+                return RedirectToAction("Read", "Project", new { id = id });
             }
             ProjectUpdateViewModel viewModel = await _repository.GetProjectUpdateVMAsync((int)id);
             if (viewModel == null)
@@ -109,8 +87,8 @@ namespace HiN_Ventures.Controllers
                 bool userIsClient = await _repository.UserIsClientAsync(viewModel.ProjectId, User);
                 if (!userIsClient)
                 {
-                    // TODO: Finn ut hvor det skal redirectes til
-                    return RedirectToAction("Index", "Home");
+                    //TempData["error"] = "Du har ikke tillatelse til å endre dette prosjektet.";
+                    return RedirectToAction("Index", "Project");
                 }
                 Project project = new Project
                 {
@@ -123,7 +101,7 @@ namespace HiN_Ventures.Controllers
                     Deadline = viewModel.Deadline
                 }; 
                 await _repository.UpdateAsync(project, User);
-                return RedirectToAction("Read", "Project");
+                return RedirectToAction("Read", "Project", new { id = viewModel.ProjectId });
             }
             // If we get here, something was wrong with the model
             return View(viewModel);
@@ -150,8 +128,6 @@ namespace HiN_Ventures.Controllers
                 //TempData["error"] = string.Format("Oops, noe gikk galt under lasting av prosjekt");
                 return RedirectToAction("Index", "Project");
             }
-
-
         }
 
         public async Task<IActionResult> GetAll()
