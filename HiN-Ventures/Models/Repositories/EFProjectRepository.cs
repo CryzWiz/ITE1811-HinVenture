@@ -144,5 +144,10 @@ namespace HiN_Ventures.Models
                 throw new Exception("Feil under nedlasting av prosjekt", ex);
             }
         }
+
+        public Task RemoveAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

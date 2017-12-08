@@ -20,6 +20,7 @@ namespace HiN_Ventures.Models
         Task<ProjectUpdateViewModel> GetProjectUpdateVMAsync(int id);
         Task<ProjectReadViewModel> GetProjectReadVMAsync(int id);
 
+        Task RemoveAsync(int id);
         
     }
 }

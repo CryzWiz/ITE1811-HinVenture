@@ -322,8 +322,86 @@ namespace HiN_Ventures_UnitTests
         }
 
 
+        [TestMethod]
+        public async Task Delete_RedirectsToIndex()
+        {
+            // Arrange
+            _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
+            var controller = new ProjectController(_repository.Object);
 
+            // Act
+            var result = await controller.Delete(1) as RedirectToActionResult;
 
+            // Assert
+            Assert.IsNotNull(result, "Redirect result is null");
+            Assert.AreEqual("Index", result.ActionName as String);
+            Assert.AreEqual("Project", result.ControllerName as String);
+        }
+
+        [TestMethod]
+        public async Task Delete_RemoveAsyncIsCalledInRepository()
+        {
+            // Arrange
+            _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            await controller.Delete(1);
+
+            // Assert
+            _repository.Verify(x => x.RemoveAsync(1), Times.Exactly(1));
+        }
+
+        [TestMethod]
+        public async Task Delete_ReturnsNotFoundIfIdIsNull()
+        {
+            // Arrange
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            int? id = null;
+            var result = await controller.Delete(id);
+
+            // Assert
+            Assert.IsNotNull(result, "View Result is null");
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
+        [TestMethod]
+        public async Task Delete_RedirectsIfUserIsNotClient()
+        {
+            // Arrange
+            _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(false));
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.Delete(1) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result, "Redirect result is null");
+            Assert.AreEqual("Index", result.ActionName as String);
+            Assert.AreEqual("Home", result.ControllerName as String);
+        }
+
+        /*[TestMethod]
+        public async Task Delete_RedirectsIfRepositoryThrowsException()
+        {
+            // Denne tester ikke mot den redirect som ligger under catch slik 
+            // som jeg ønsker at den skal...
+
+            // Arrange
+            _repository.Setup(x => x.UserIsClientAsync(1, It.IsAny<IPrincipal>())).Returns(Task.FromResult<bool>(true));
+            _repository.Setup(x => x.RemoveAsync(1)).Throws(new Exception());
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.Read(1) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result, "Redirect result is null");
+            Assert.AreEqual("Index", result.ActionName as String);
+            Assert.AreEqual("TEST", result.ControllerName as String);
+        }*/
 
         // TODO: TEST TEMPDATA!!!
 

@@ -119,7 +119,7 @@ namespace HiN_Ventures.Controllers
                 ProjectReadViewModel project = await _repository.GetProjectReadVMAsync((int)id);
                 if (project == null)
                 {
-                    TempData["error"] = "Kunne ikke finne valgt prosjekt";
+                    //TempData["error"] = "Kunne ikke finne valgt prosjekt";
                     return RedirectToAction("Index", "Project");
                 }
                 return View(project);
@@ -128,6 +128,35 @@ namespace HiN_Ventures.Controllers
                 //TempData["error"] = string.Format("Oops, noe gikk galt under lasting av prosjekt");
                 return RedirectToAction("Index", "Project");
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound("Bad parameter");
+            }
+            bool userIsClient = await _repository.UserIsClientAsync((int)id, User);
+            if(userIsClient)
+            {
+                try
+                {
+                    await _repository.RemoveAsync((int)id);
+
+                    //TempData["success"] = string.Format("Prosjekt med id: - {0} - ble slettet", id);
+                    return RedirectToAction("Index", "Project");
+                }
+                catch (Exception ex)
+                {
+                    //TempData["error"] = string.Format("Oops, noe gikk galt under sletting av prosjektet");
+                    return RedirectToAction("Index", "Project");
+                }
+
+            }
+            //TempData["error"] = "Du har ikke tillatelse til å slette dette prosjektet.";
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> GetAll()
