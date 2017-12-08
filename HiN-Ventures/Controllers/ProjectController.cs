@@ -114,17 +114,22 @@ namespace HiN_Ventures.Controllers
             {
                 return NotFound("Bad parameter");
             }
-
-            // TODO: Bytt ut med ProjectReadVMAsync()
-            Project project = await _repository.GetByIdAsync((int)id);
-            if(project == null)
+            try
             {
-                // TempData["error"] = "Kunne ikke finne valgt prosjekt";
+                ProjectReadViewModel project = await _repository.GetProjectReadVMAsync((int)id);
+                if (project == null)
+                {
+                    TempData["error"] = "Kunne ikke finne valgt prosjekt";
+                    return RedirectToAction("Index", "Project");
+                }
+                return View(project);
+            } catch(Exception ex)
+            {
+                //TempData["error"] = string.Format("Oops, noe gikk galt under lasting av prosjekt");
                 return RedirectToAction("Index", "Project");
             }
 
-            
-            return View(project);
+
         }
 
         public async Task<IActionResult> GetAll()

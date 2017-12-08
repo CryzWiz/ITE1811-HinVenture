@@ -15,7 +15,7 @@ namespace HiN_Ventures.Models.ProjectViewModels
         public bool Open { get; set; }
         public DateTime Deadline { get; set; }
         public DateTime DateCreated { get; set; }
-
         public KlientInfo Client { get; set; }
-    }
+        public FreelancerInfo Freelancer { get; set; }
+}
 }

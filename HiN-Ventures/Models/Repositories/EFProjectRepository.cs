@@ -40,7 +40,7 @@ namespace HiN_Ventures.Models
 
         public async Task<Project> GetByIdAsync(int id)
         {
-            return await Task.Run(() => GetById(id));
+            return await _db.Projects.Where(x => x.ProjectId == id).FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(Project project, IPrincipal user)
@@ -94,9 +94,55 @@ namespace HiN_Ventures.Models
             return viewModel;
         }
 
-        public Task<ProjectReadViewModel> GetProjectReadVMAsync(int id)
+        public async Task<KlientInfo> GetClientAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _db.KlientInfo.Where(x => x.UserId == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<FreelancerInfo> GetFreelancerAsync(string id)
+        {
+            return await _db.FreelancerInfo.Where(x => x.UserId == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<ProjectReadViewModel> GetProjectReadVMAsync(int id)
+        {
+            try
+            {
+                Project project = await GetByIdAsync(id);
+                if(project != null)
+                {
+                    ProjectReadViewModel viewModel = new ProjectReadViewModel()
+                    {
+                        ProjectId = project.ProjectId,
+                        ProjectTitle = project.ProjectTitle,
+                        ProjectDescription = project.ProjectDescription,
+                        Active = project.Active,
+                        Complete = project.Complete,
+                        Open = project.Open,
+                        Deadline = project.Deadline,
+                        DateCreated = project.DateCreated
+                    };
+
+                    if (project.FreelanceId != null && project.FreelanceId != "")
+                    {
+                        viewModel.Freelancer = await GetFreelancerAsync(project.FreelanceId);
+                    }
+
+                    if (project.ClientId != null && project.ClientId != "")
+                    {
+                        viewModel.Client = await GetClientAsync(project.ClientId);
+                    }
+
+                    return viewModel;
+                } else
+                {
+                    throw new Exception("Kunne ikke finne et prosjekt med valgt id");
+                }
+
+            } catch(Exception ex)
+            {
+                throw new Exception("Feil under nedlasting av prosjekt", ex);
+            }
         }
     }
 }

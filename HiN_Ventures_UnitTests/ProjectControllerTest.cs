@@ -21,6 +21,7 @@ namespace HiN_Ventures_UnitTests
         List<Project> _fakeProjects;
         ProjectCreateViewModel _fakeProjectCreateVM;
         ProjectUpdateViewModel _fakeProjectUpdateVM;
+        ProjectReadViewModel _fakeProjectReadVM;
 
 
         [TestInitialize]
@@ -43,12 +44,16 @@ namespace HiN_Ventures_UnitTests
                 Deadline = DateTime.Now
             };
 
+
+
             var fakeFreelancers = new List<FreelancerInfo>
             {
                 new FreelancerInfo { FirstName = "Ola" },
                 new FreelancerInfo { FirstName = "Normann" }
 
             };
+
+            
 
             _fakeProjectUpdateVM = new ProjectUpdateViewModel
             {
@@ -61,7 +66,19 @@ namespace HiN_Ventures_UnitTests
                 Deadline = DateTime.Now,
                 //Freelancers = fakeFreelancers
             };
-            string test = "test";
+
+            _fakeProjectReadVM = new ProjectReadViewModel()
+            {
+                ProjectTitle = "Title",
+                ProjectDescription = "Description",
+                Active = true,
+                Open = true,
+                Complete = false,
+                Deadline = DateTime.Now,
+                DateCreated = DateTime.Now,
+                Freelancer = fakeFreelancers[0],
+                Client = new KlientInfo { CompanyName = "UiT Norges Arktiske Universitet" }
+            };
 
         }
 
@@ -242,9 +259,7 @@ namespace HiN_Ventures_UnitTests
         public async Task ReadGet_ReturnsCorrectProject()
         {
             // Arrange
-
-            
-            _repository.Setup(x => x.GetByIdAsync(1)).Returns(Task.FromResult<Project>(_fakeProjects[0]));
+            _repository.Setup(x => x.GetProjectReadVMAsync(1)).Returns(Task.FromResult<ProjectReadViewModel>(_fakeProjectReadVM));
             var controller = new ProjectController(_repository.Object);
 
             // Act
@@ -254,16 +269,14 @@ namespace HiN_Ventures_UnitTests
             Assert.IsNotNull(result, "View Result is null");
             var project = result.ViewData.Model as ProjectReadViewModel;
             Assert.IsInstanceOfType(project, typeof(ProjectReadViewModel));
-            Assert.AreEqual(project, _fakeProjects[0]);
+            Assert.AreEqual(project, _fakeProjectReadVM);
         }
 
         [TestMethod]
         public async Task ReadGet_RedirectsIfProjectWasNotFound()
         {
             // Arrange
-
-            // Bytt ut med ProjectReadVMAsync(1)
-            _repository.Setup(x => x.GetByIdAsync(1)).Returns(Task.FromResult<Project>(null));
+            _repository.Setup(x => x.GetProjectReadVMAsync(1)).Returns(Task.FromResult<ProjectReadViewModel>(null));
             var controller = new ProjectController(_repository.Object);
 
             // Act
@@ -271,9 +284,24 @@ namespace HiN_Ventures_UnitTests
 
             // Assert
             Assert.IsNotNull(result, "Redirect result is null");
+            _repository.Verify(x => x.GetProjectReadVMAsync(1), Times.Exactly(1));
+            Assert.AreEqual("Index", result.ActionName as String);
+            Assert.AreEqual("Project", result.ControllerName as String);
+        }
 
-            // Bytt ut med ProjectReadVMAsync(1)
-            _repository.Verify(x => x.GetByIdAsync(1), Times.Exactly(1));
+        [TestMethod]
+        public async Task ReadGet_RedirectsIfRepositoryThrowsException()
+        {
+            // Arrange
+            _repository.Setup(x => x.GetProjectReadVMAsync(1)).Throws(new Exception());
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.Read(1) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result, "Redirect result is null");
+            _repository.Verify(x => x.GetProjectReadVMAsync(1), Times.Exactly(1));
             Assert.AreEqual("Index", result.ActionName as String);
             Assert.AreEqual("Project", result.ControllerName as String);
         }
