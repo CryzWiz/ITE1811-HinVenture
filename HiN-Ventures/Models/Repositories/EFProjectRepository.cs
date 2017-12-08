@@ -161,5 +161,11 @@ namespace HiN_Ventures.Models
                 throw new Exception("User is not client");
             }
         }
+
+
+        public Task<List<Project>> GetAllAsync(bool active = true, bool open = true, bool complete = false)
+        {
+            return _db.Projects.Where(x => x.Active == active && x.Open == open && x.Complete == complete).ToListAsync();
+        }
     }
 }

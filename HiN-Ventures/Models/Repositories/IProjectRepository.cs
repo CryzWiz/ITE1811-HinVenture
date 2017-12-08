@@ -10,7 +10,7 @@ namespace HiN_Ventures.Models
 {
     public interface IProjectRepository
     {
-        Task<IEnumerable<Project>> GetAllAsync();
+        Task<IEnumerable<Project>> GetAllAsync(bool active = true, bool open = true, bool complete = false);
         Task AddAsync(Project project, IPrincipal user);
 
         Project GetById(int id);

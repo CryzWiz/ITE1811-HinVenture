@@ -20,8 +20,9 @@ namespace HiN_Ventures.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
             return View();
         }
         
@@ -144,7 +145,6 @@ namespace HiN_Ventures.Controllers
                 try
                 {
                     await _repository.RemoveAsync((int)id, User);
-
                     //TempData["success"] = string.Format("Prosjekt med id: - {0} - ble slettet", id);
                     return RedirectToAction("Index", "Project");
                 }
@@ -153,7 +153,6 @@ namespace HiN_Ventures.Controllers
                     //TempData["error"] = string.Format("Oops, noe gikk galt under sletting av prosjektet");
                     return RedirectToAction("Index", "Project");
                 }
-
             }
             //TempData["error"] = "Du har ikke tillatelse til å slette dette prosjektet.";
             return RedirectToAction("Index", "Home");

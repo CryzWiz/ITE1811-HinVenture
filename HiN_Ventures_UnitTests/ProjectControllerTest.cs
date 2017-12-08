@@ -349,7 +349,7 @@ namespace HiN_Ventures_UnitTests
             await controller.Delete(1);
 
             // Assert
-            _repository.Verify(x => x.RemoveAsync(1), Times.Exactly(1));
+            _repository.Verify(x => x.RemoveAsync(1, It.IsAny<IPrincipal>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -382,6 +382,13 @@ namespace HiN_Ventures_UnitTests
             Assert.AreEqual("Index", result.ActionName as String);
             Assert.AreEqual("Home", result.ControllerName as String);
         }
+
+        //[TestMethod]
+        public async Task Index_ReturnsCorrectViewModel()
+        {
+
+        }
+
 
         /*[TestMethod]
         public async Task Delete_RedirectsIfRepositoryThrowsException()
