@@ -164,9 +164,24 @@ namespace HiN_Ventures_UnitTests
             Assert.AreEqual(_fakeProjects, projects);
         }
 
+        [TestMethod]
         public async Task Index_ReturnsAllOpenAndActiveProjects()
         {
+            // Arrange
+            _repository.Setup(x => x.GetAllAsync(true, true, false)).Returns(Task.FromResult<IEnumerable<Project>>(_fakeOpenAndActiveProjects));
+            var controller = new ProjectController(_repository.Object);
 
+            // Act
+            var result = await controller.Index() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result, "ViewResult is null");
+            var projects = result.ViewData.Model as List<Project>;
+            CollectionAssert.AllItemsAreInstancesOfType((ICollection)result.ViewData.Model, typeof(Project));
+            Assert.AreEqual(_fakeOpenAndActiveProjects.Count, projects.Count, "Got wrong number of projects");
+            Assert.AreEqual(_fakeOpenAndActiveProjects, projects);
+            _repository.Verify(x => x.GetAllAsync(true, true, false), Times.Exactly(1));
+            
         }
 
         public async Task GetAllActive_ReturnsAllActiveProjects()

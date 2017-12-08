@@ -14,6 +14,5 @@ namespace HiN_Ventures.Models
         public DateTime? BirthDate { get; set; }
         public string Personnummer { get; set; }
         public string PostAddress { get; set; }
-
     }
 }

@@ -33,7 +33,29 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="Project" asp-action="Index">Projects</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects (for client)</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Project" asp-action="Index">Open / Active projects</a></li>
+                            <li><a asp-area="" asp-controller="Project" asp-action="GetAll">All projects</a></li>
+                            <li class="divider"></li>
+                            <li><a asp-controller="Project" asp-action="Create">Create new project</a></li>
+
+                            <li class="divider"></li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects (for freelancer)</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Project" asp-action="Index">Open / Active projects</a></li>
+                            <li><a asp-area="" asp-controller="Project" asp-action="GetAll">All projects</a></li>
+                            <li class="divider"></li>
+                            
+                            <li class="divider"></li>
+
+                        </ul>
+                    </li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -66,6 +88,11 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+
+        <!-- Sortable lists are made based on this example and the following scripts: https://datatables.net/examples/styling/bootstrap4.html -->
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"

@@ -22,8 +22,8 @@ namespace HiN_Ventures.Controllers
 
         public async Task<IActionResult> Index()
         {
-
-            return View();
+            var projects = await _repository.GetAllAsync(true, true, false);
+            return View(projects);
         }
         
         [HttpGet]
@@ -51,7 +51,7 @@ namespace HiN_Ventures.Controllers
 
                 await _repository.AddAsync(project, User);
                 //TempData["success"] = string.Format("Prosjektet: - {0} - har blitt opprettet", project.ProjectTitle);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Project"); // Bytt denne ut til å hente egne prosjekter
             }
             // If we get here, something went wrong
             return View(viewModel);
@@ -163,6 +163,16 @@ namespace HiN_Ventures.Controllers
             // TODO: Mer å legge inn her..
             var projects = await _repository.GetAllAsync();
             return View(projects);
+        }
+
+        public async Task<IActionResult> MyActiveProjects()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> MyCompletedProjects()
+        {
+            return View();
         }
     }
 }
