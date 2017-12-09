@@ -25,11 +25,13 @@ namespace HiN_Ventures.Controllers
             var projects = await _repository.GetAllAsync(true, true, false);
             return View(projects);
         }
-        
+
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new ProjectCreateViewModel());
+            ProjectCreateViewModel vm = new ProjectCreateViewModel();
+            vm.Deadline = DateTime.Today;
+            return View(vm);
         }
 
         [HttpPost]
@@ -46,7 +48,8 @@ namespace HiN_Ventures.Controllers
                     ProjectDescription = viewModel.ProjectDescription,
                     Active = viewModel.Active,
                     Open = viewModel.Open,
-                    Deadline = viewModel.Deadline
+                    Deadline = viewModel.Deadline,
+                    DateCreated = DateTime.Now
                 };
 
                 await _repository.AddAsync(project, User);

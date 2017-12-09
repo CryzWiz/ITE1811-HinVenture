@@ -18,6 +18,8 @@ namespace HiN_Ventures.Models.ProjectViewModels
         public bool Active { get; set; }
 
         public bool Open { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime Deadline { get; set; }
 
         public IEnumerable<Skill> RequiredSkills { get; set; }

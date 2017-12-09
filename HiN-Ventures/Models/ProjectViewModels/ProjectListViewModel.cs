@@ -13,6 +13,7 @@ namespace HiN_Ventures.Models.ProjectViewModels
         public bool Active { get; set; }
         public bool Complete { get; set; }
         public bool Open { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime Deadline { get; set; }
 
         [Display(Name = "Company")]
