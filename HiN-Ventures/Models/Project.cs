@@ -18,7 +18,9 @@ namespace HiN_Ventures.Models
         public DateTime Deadline { get; set; }
         public DateTime DateCreated { get; set; }
 
-    
-        //IEnumerable<Code> 
-    }
+        public IEnumerable<Skill> RequiredSkills { get; set; }
+
+
+    //IEnumerable<Code> 
+}
 }

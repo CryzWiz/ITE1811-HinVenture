@@ -25,9 +25,14 @@ namespace HiN_Ventures.Models.ProjectViewModels
         public bool Complete { get; set; }
         public DateTime Deadline { get; set; }
 
+         public IEnumerable<Skill> RequiredSkills { get; set; }
+        public IEnumerable<Skill> Skills { get; set; }
+
         // Freelancers
         public List<FreelancerInfo> Freelancers { get; set; }
         public FreelancerInfo Freelancer { get; set; }
+
+
 
     }
 }

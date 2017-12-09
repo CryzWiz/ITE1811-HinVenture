@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HiN_Ventures.Models.Project>
+﻿@model IEnumerable<HiN_Ventures.Models.ProjectViewModels.ProjectListViewModel>
 
 @{
     ViewData["Title"] = "GetAll";
@@ -10,10 +10,10 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ClientId)
+                    @Html.DisplayNameFor(model => model.Client)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FreelanceId)
+                    @Html.DisplayNameFor(model => model.Freelancer)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ProjectTitle)
@@ -21,9 +21,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Deadline)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Complete)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -31,11 +34,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
+                @Html.DisplayFor(modelItem => item.Client.CompanyName)
             </td>
+         @if (item.Freelancer != null)
+         {
             <td>
-                @Html.DisplayFor(modelItem => item.FreelanceId)
+                @Html.DisplayFor(modelItem => item.Freelancer.FirstName)
             </td>
+
+         }
+         else
+         {
+            <td>
+                <a asp-action="Read" asp-route-id="@item.ProjectId">Available</a>
+            </td>
+         }
+
             <td>
                 @Html.DisplayFor(modelItem => item.ProjectTitle)
             </td>
@@ -43,11 +57,14 @@
                 @Html.DisplayFor(modelItem => item.Deadline)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Complete)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a> |
+                <a asp-action="Read" asp-route-id="@item.ProjectId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
             </td>
         </tr>

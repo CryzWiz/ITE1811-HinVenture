@@ -6,21 +6,19 @@ using System.Threading.Tasks;
 
 namespace HiN_Ventures.Models.ProjectViewModels
 {
-    public class ProjectCreateViewModel
+    public class ProjectListViewModel
     {
-        [Required]
+        public int ProjectId { get; set; }
         public string ProjectTitle { get; set; }
-
-        [Required]
-        public string ProjectDescription { get; set; }
-
-        [Display(Name = "Activate project")]
         public bool Active { get; set; }
-
+        public bool Complete { get; set; }
         public bool Open { get; set; }
         public DateTime Deadline { get; set; }
 
-        public IEnumerable<Skill> RequiredSkills { get; set; }
-        public IEnumerable<Skill> Skills { get; set; }
+        [Display(Name = "Company")]
+        public KlientInfo Client { get; set; }
+
+        [Display(Name = "Freelancer")]
+        public FreelancerInfo Freelancer { get; set; }
     }
 }

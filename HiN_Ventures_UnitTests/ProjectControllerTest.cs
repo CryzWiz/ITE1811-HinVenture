@@ -19,6 +19,7 @@ namespace HiN_Ventures_UnitTests
     {
         Mock<IProjectRepository> _repository;
         List<Project> _fakeProjects;
+        List<ProjectListViewModel> _fakeProjectList;
         List<Project> _fakeOpenAndActiveProjects;
         List<Project> _fakeActiveProjects;
         List<Project> _fakeCompleteProjects;
@@ -103,6 +104,25 @@ namespace HiN_Ventures_UnitTests
                 _fakeActiveProjects[3]
             };
 
+            _fakeProjectList = new List<ProjectListViewModel>
+            {
+                // TODO: Utvides
+                 new ProjectListViewModel
+                {
+                ProjectTitle = "Tittel1",
+                Active = true,
+                Open = true,
+                Complete = false
+                },
+                new ProjectListViewModel
+                {
+                ProjectTitle = "Tittel3",
+                Active = true,
+                Open = true,
+                Complete = false
+                }
+            };
+
             _fakeProjectCreateVM = new ProjectCreateViewModel()
             {
                 ProjectTitle = "Title",
@@ -150,7 +170,7 @@ namespace HiN_Ventures_UnitTests
         public async Task GetAll_ReturnsAllProjects()
         {
             // Arrange
-            _repository.Setup(x => x.GetAllAsync()).ReturnsAsync(_fakeProjects);
+            _repository.Setup(x => x.GetAllProjectListVMAsync()).ReturnsAsync(_fakeProjectList);
             var controller = new ProjectController(_repository.Object);
 
             // Act
@@ -158,10 +178,10 @@ namespace HiN_Ventures_UnitTests
 
             // Assert
             Assert.IsNotNull(result, "ViewResult is null");
-            CollectionAssert.AllItemsAreInstancesOfType((ICollection)result.ViewData.Model, typeof(Project));
-            var projects = result.ViewData.Model as List<Project>;
-            Assert.AreEqual(_fakeProjects.Count, projects.Count, "Got wrong number of projects");
-            Assert.AreEqual(_fakeProjects, projects);
+            CollectionAssert.AllItemsAreInstancesOfType((ICollection)result.ViewData.Model, typeof(ProjectListViewModel));
+            var projects = result.ViewData.Model as List<ProjectListViewModel>;
+            Assert.AreEqual(_fakeProjectList.Count, projects.Count, "Got wrong number of projects");
+            Assert.AreEqual(_fakeProjectList, projects);
         }
 
         [TestMethod]

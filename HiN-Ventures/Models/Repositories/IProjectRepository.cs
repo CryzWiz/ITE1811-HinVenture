@@ -22,6 +22,8 @@ namespace HiN_Ventures.Models
         Task<ProjectReadViewModel> GetProjectReadVMAsync(int id);
 
         Task RemoveAsync(int id, IPrincipal user);
+
+        Task<IEnumerable<ProjectListViewModel>> GetAllProjectListVMAsync();
         
     }
 }

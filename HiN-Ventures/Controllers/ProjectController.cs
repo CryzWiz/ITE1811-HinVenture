@@ -161,7 +161,7 @@ namespace HiN_Ventures.Controllers
         public async Task<IActionResult> GetAll()
         {
             // TODO: Mer å legge inn her..
-            var projects = await _repository.GetAllAsync();
+            IEnumerable<ProjectListViewModel> projects = await _repository.GetAllProjectListVMAsync();
             return View(projects);
         }
 

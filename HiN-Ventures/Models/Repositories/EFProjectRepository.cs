@@ -167,5 +167,39 @@ namespace HiN_Ventures.Models
                 throw new Exception("User is not client");
             }
         }
+
+        public async Task<IEnumerable<ProjectListViewModel>> GetAllProjectListVMAsync()
+        {
+            /*IEnumerable<ProjectGetAllViewModel> projects = await (from project in _db.Projects
+                                                                  where project.ClientId == "445b2caf-84ac-4be1-b468-d684f29cb01c"
+                                                                  select new ProjectGetAllViewModel
+                           {
+                               ProjectId = project.ProjectId,
+                               ProjectTitle = project.ProjectTitle,
+                               Active = project.Active,
+                               Complete = project.Complete,
+                               Open = project.Open,
+                               Deadline = project.Deadline,
+                               Client = _db.KlientInfo.Where(x => x.UserId == project.ClientId).FirstOrDefault()
+                               //Freelancer = _db.FreelancerInfo.Where(x => x.UserId == project.FreelanceId).FirstOrDefault(),
+                           }).ToListAsync();*/
+            IEnumerable<ProjectListViewModel> projects = await (from project in _db.Projects
+                                                            //join client in _db.KlientInfo on project.ClientId equals client.UserId
+                                                            //join freelancer in _db.FreelancerInfo on project.FreelancerId equal freelancer.UserId
+                                                            select new ProjectListViewModel
+                                                            {
+                                                                ProjectId = project.ProjectId,
+                                                                ProjectTitle = project.ProjectTitle,
+                                                                Active = project.Active,
+                                                                Complete = project.Complete,
+                                                                Open = project.Open,
+                                                                Deadline = project.Deadline,
+                                                                //Client = client,
+                                                                //Freelancer = freelancer
+                                                            }).ToListAsync();
+   
+            
+            return projects;
+        }
     }
 }
