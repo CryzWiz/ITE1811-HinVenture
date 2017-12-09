@@ -13,5 +13,18 @@
         <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a asp-action="ExternalLogins">External logins</a></li>
     }
     <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"><a asp-action="TwoFactorAuthentication">Two-factor authentication</a></li>
+    @if (User.IsInRole("Administrator"))
+    {
+        <li class="@ManageNavPages.ManageKlientNavClass(ViewContext)"><a asp-action="ManageKlient">Manage klients</a></li>
+
+        <li class="@ManageNavPages.ManageFreelanceNavClass(ViewContext)"><a asp-action="ManageFreelance">Manage freelance</a></li>
+
+        <li class="@ManageNavPages.ManagePaymentsNavClass(ViewContext)"><a asp-action="ManagePayments">Manage payments</a></li>
+
+    }
+    @if (User.IsInRole("Administrator") || User.IsInRole("Senior"))
+    {
+        <li class="@ManageNavPages.ManageProjectsNavClass(ViewContext)"><a asp-action="ManageProjects">Manage Projects</a></li>
+    }
 </ul>
 

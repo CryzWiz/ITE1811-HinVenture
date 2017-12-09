@@ -302,7 +302,7 @@ namespace HiN_Ventures.Controllers
             EFPBitcoinRepository _repository = new EFPBitcoinRepository(_context);
             var ourList = _repository.GetAddressByUserId(user.Id);
             BitCoinAddress f = await _repository.GetPrimaryAddressAsync(user.Id);
-            var model = new BitCoinViewModel { StatusMessage = StatusMessage, BitCoinAddress = f.Address, Name = f.Name, AllBitcoinAddresses = ourList };
+            var model = new BitCoinViewModel { StatusMessage = StatusMessage, /*BitCoinAddress = f.Address, Name = f.Name,*/ AllBitcoinAddresses = ourList };
 
             return View(model);
 
