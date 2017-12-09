@@ -32,5 +32,10 @@ namespace HiN_Ventures.Models.Repositories
                 return false; ;
             }
         }
+
+        public async Task<IEnumerable<KlientInfo>> GetAllKlientsAsync()
+        {
+            return await Task.Run(() => _db.KlientInfo);
+        }
     }
 }

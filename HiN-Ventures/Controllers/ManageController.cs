@@ -299,9 +299,8 @@ namespace HiN_Ventures.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            EFPBitcoinRepository _repository = new EFPBitcoinRepository(_context);
-            var ourList = _repository.GetAddressByUserId(user.Id);
-            BitCoinAddress f = await _repository.GetPrimaryAddressAsync(user.Id);
+            var ourList = _bitCoinRepository.GetAddressByUserId(user.Id);
+            BitCoinAddress f = await _bitCoinRepository.GetPrimaryAddressAsync(user.Id);
             var model = new BitCoinViewModel { StatusMessage = StatusMessage, /*BitCoinAddress = f.Address, Name = f.Name,*/ AllBitcoinAddresses = ourList };
 
             return View(model);
@@ -314,10 +313,17 @@ namespace HiN_Ventures.Controllers
             EFPBitcoinRepository _repository = new EFPBitcoinRepository(_context);
             
             
-                await _repository.DeleteAddress(id);
+                await _bitCoinRepository.DeleteAddress(id);
                 return RedirectToAction("Bitcoin");
             
 
+        }
+
+        public async Task<IActionResult> ManageKlient()
+        {
+            var list = await _klientRepository.GetAllKlientsAsync();
+            var model = new ManageKlientViewModel { StatusMessage = StatusMessage, AllKlients = list };
+            return View(model);
         }
 
         [HttpPost]

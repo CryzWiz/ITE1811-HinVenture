@@ -1,10 +1,17 @@
-﻿@model IEnumerable<HiN_Ventures.Models.KlientInfo>
+﻿@model HiN_Ventures.Models.ManageViewModels.ManageKlientViewModel
 
 @{
     ViewData["Title"] = "ManageKlient";
 }
 
 <h2>ManageKlient</h2>
+@{
+    ViewData["Title"] = "Manage Klients";
+    ViewData.AddActivePage(ManageNavPages.ManageKlient);
+}
+
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -31,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.AllKlients) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.KlientInfoId)
