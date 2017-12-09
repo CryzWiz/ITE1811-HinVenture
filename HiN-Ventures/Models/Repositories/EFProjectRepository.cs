@@ -49,26 +49,23 @@ namespace HiN_Ventures.Models
             return await _db.Projects.Where(x => x.ProjectId == id).FirstOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(Project project, IPrincipal user)
+        public async Task UpdateAsync(Project project)
         {
-            if (await UserIsClientAsync(project.ProjectId, user))
+            Project updatedProject = await GetByIdAsync(project.ProjectId);
+            if (updatedProject != null)
             {
-                Project updatedProject = await GetByIdAsync(project.ProjectId);
-                if (updatedProject != null)
-                {
                     // TODO: legg inn noen if() her!
-                    await Task.Run(() => _db.Projects.Update(updatedProject));
-                    await _db.SaveChangesAsync();
-                }
-                else
-                {
-                    throw new Exception("Update project: project was not found");
-                }
-            } else
-            {
-                throw new Exception("Update project: User does not have access to this project");
+                await Task.Run(() => _db.Projects.Update(updatedProject));
+                await _db.SaveChangesAsync();
             }
+            else
+            {
+                throw new Exception("Update project: project was not found");
+            }
+
         }
+
+        
 
         public async Task<bool> UserIsClientAsync(int projectId, IPrincipal user)
         {
@@ -200,6 +197,22 @@ namespace HiN_Ventures.Models
    
             
             return projects;
+        }
+
+        public async Task AssignFreelancer(int id, IPrincipal user)
+        {
+            var project = await GetByIdAsync(id);
+            if(project.FreelanceId == null || project.FreelanceId == "")
+            {
+                var currentUser = await _userManager.FindByNameAsync(user.Identity.Name);
+                project.FreelanceId = currentUser.Id;
+                project.Open = false;
+                await UpdateAsync(project);
+            } else
+            {
+                throw new Exception("Freelancer already set");
+            }
+
         }
     }
 }

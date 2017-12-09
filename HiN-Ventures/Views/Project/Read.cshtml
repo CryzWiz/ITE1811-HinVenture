@@ -4,18 +4,29 @@
     ViewData["Title"] = "Read";
 }
 
-<h2>Read</h2>
+<h2>@Html.DisplayFor(model => model.ProjectTitle)</h2>
 
 <div>
     <h4>Project</h4>
     <hr />
     <dl class="dl-horizontal">
-
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectTitle)
+            @Html.DisplayNameFor(model => model.Client.CompanyName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProjectTitle)
+            @Html.DisplayFor(model => model.Client.CompanyName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Client.OrgNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Client.OrgNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Client.PostAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Client.PostAddress)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ProjectDescription)
@@ -42,11 +53,37 @@
             @Html.DisplayFor(model => model.Open)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Deadline)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Deadline)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Freelancer)
+        </dt>
+        @if (Model.Freelancer != null)
+        {
+            <dd>
+                @Html.DisplayFor(model => model.Freelancer.FirstName)
+                @Html.DisplayFor(model => model.Freelancer.LastName)
+            </dd>
+
+        }
+        else
+        {
+            <dd>
+                <a asp-action="AssignProject" asp-route-projectId="@Model.ProjectId">Take project</a>
+            </dd>
+
+        }
+
     </dl>
 </div>
 <div>

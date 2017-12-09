@@ -33,7 +33,7 @@ namespace HiN_Ventures.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Klient")]
         public async Task<IActionResult> Save(
             [Bind("ProjectTitle, ProjectDescription, Active, Open, Deadline")]
             ProjectCreateViewModel viewModel)
@@ -58,7 +58,7 @@ namespace HiN_Ventures.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Klient")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,7 +80,7 @@ namespace HiN_Ventures.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Klient")]
         public async Task<IActionResult> Update(ProjectUpdateViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -101,7 +101,7 @@ namespace HiN_Ventures.Controllers
                     Complete = viewModel.Complete,
                     Deadline = viewModel.Deadline
                 }; 
-                await _repository.UpdateAsync(project, User);
+                await _repository.UpdateAsync(project);
                 return RedirectToAction("Read", "Project", new { id = viewModel.ProjectId });
             }
             // If we get here, something was wrong with the model
@@ -132,7 +132,7 @@ namespace HiN_Ventures.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles ="Administrator, Klient")]
         public async Task<IActionResult> Delete(int? id)
         {
             if(id == null)
@@ -173,6 +173,34 @@ namespace HiN_Ventures.Controllers
         public async Task<IActionResult> MyCompletedProjects()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Klient, Freelance")]
+        public async Task<IActionResult> AssignProject(int? projectId)
+        {
+            if (projectId == null)
+            {
+                return NotFound("Bad parameter");
+            }
+
+            if(User.IsInRole("Freelance")) // TODO: Hvordan teste dette?
+            {
+                // TODO: Sjekk for required skills
+                try
+                {
+             
+                    await _repository.AssignFreelancer((int)projectId, User);
+                } catch (Exception ex)
+                {
+                    //TempData["error"] = string.Format("Freelancer eksisterer allerede på dette prosjektet");
+                    return RedirectToAction("Read", "Project", new { id = projectId });
+                }
+               
+            }
+
+            //TempData["success"] = "Du er satt som freelancer på dette prosjektet";
+            return RedirectToAction("Read", "Project", new { id = projectId });
         }
     }
 }

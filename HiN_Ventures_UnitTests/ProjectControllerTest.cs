@@ -304,7 +304,7 @@ namespace HiN_Ventures_UnitTests
             await controller.Update(_fakeProjectUpdateVM);
 
             // Assert
-            _repository.Verify(x => x.UpdateAsync(It.IsAny<Project>(), It.IsAny<IPrincipal>()), Times.Exactly(1));
+            _repository.Verify(x => x.UpdateAsync(It.IsAny<Project>()), Times.Exactly(1));
         }
 
         /*[TestMethod]
@@ -488,7 +488,51 @@ namespace HiN_Ventures_UnitTests
             Assert.AreEqual("Home", result.ControllerName as String);
         }
 
+       /* [TestMethod]
+        public async Task AssigProject_AssignFreelancerIsCalled()
+        {
+            // Arrange
+            //_repository.Setup()
+            var controller = new ProjectController(_repository.Object);
+            
+            // Act
+            var result = await controller.AssignProject(1);
 
+            // Assert
+            _repository.Verify(x => x.AssignFreelancer(1, It.IsAny<IPrincipal>()), Times.Exactly(1));
+        }
+
+        [TestMethod]
+        public async Task AssignProject_RedirectsToReadIfSuccess()
+        {
+            // Arrange
+            _repository.Setup(x => x.AssignFreelancer(1, It.IsAny<IPrincipal>()));
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            var result = await controller.AssignProject(1) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result, "Redirect result is null");
+            Assert.AreEqual("Read", result.ActionName as String);
+            Assert.AreEqual("Project", result.ControllerName as String);
+
+        }*/
+
+        [TestMethod]
+        public async Task AssignProject_ReturnsNotFoundIfIdIsNull()
+        {
+            // Arrange
+            var controller = new ProjectController(_repository.Object);
+
+            // Act
+            int? id = null;
+            var result = await controller.AssignProject(id);
+
+            // Assert
+            Assert.IsNotNull(result, "View Result is null");
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
 
 
         /*[TestMethod]

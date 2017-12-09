@@ -16,7 +16,7 @@ namespace HiN_Ventures.Models
 
         Project GetById(int id);
         Task<Project> GetByIdAsync(int id);
-        Task UpdateAsync(Project project, IPrincipal user);
+        Task UpdateAsync(Project project);
         Task<bool> UserIsClientAsync(int projectId, IPrincipal user);
         Task<ProjectUpdateViewModel> GetProjectUpdateVMAsync(int id);
         Task<ProjectReadViewModel> GetProjectReadVMAsync(int id);
@@ -24,6 +24,6 @@ namespace HiN_Ventures.Models
         Task RemoveAsync(int id, IPrincipal user);
 
         Task<IEnumerable<ProjectListViewModel>> GetAllProjectListVMAsync();
-        
+        Task AssignFreelancer(int id, IPrincipal user);
     }
 }
