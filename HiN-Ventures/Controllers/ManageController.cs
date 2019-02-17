@@ -319,6 +319,14 @@ namespace HiN_Ventures.Controllers
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetBitcoinAsPrimary()
+        {
+            throw new NotImplementedException();
+
+        }
+
         public async Task<IActionResult> ManageKlient()
         {
             var list = await _klientRepository.GetAllKlientsAsync();
@@ -326,12 +334,11 @@ namespace HiN_Ventures.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetBitcoinAsPrimary()
+        public async Task<IActionResult> ManageFreelance()
         {
-            throw new NotImplementedException();
-
+            var list = await _freelanceRepository.GetAllFreelancersAsync();
+            var model = new ManageFreelancerViewModel { StatusMessage = StatusMessage, AllFreelancers = list };
+            return View(model);
         }
 
         [HttpPost]

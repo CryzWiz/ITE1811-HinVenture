@@ -9,5 +9,6 @@ namespace HiN_Ventures.Models.Repositories
     {
         Task<FreelancerInfo> GetFreelancerInfoAsync(string id);
         void UpdateFreelancerInfoAsync(FreelancerInfo freelancer);
+        Task<IEnumerable<FreelancerInfo>> GetAllFreelancersAsync();
     }
 }

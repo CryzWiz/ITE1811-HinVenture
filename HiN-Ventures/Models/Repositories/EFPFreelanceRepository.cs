@@ -25,5 +25,10 @@ namespace HiN_Ventures.Models.Repositories
             _db.FreelancerInfo.Update(freelancer);
             await _db.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<FreelancerInfo>> GetAllFreelancersAsync()
+        {
+            return await Task.Run(() => _db.FreelancerInfo);
+        }
     }
 }

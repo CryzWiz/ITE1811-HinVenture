@@ -5,6 +5,10 @@
     <UserSecretsId>aspnet-HiN_Ventures-91088E4A-8558-4F37-A7E2-52155686783F</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="Views\Manage\ManageFreelance.cshtml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
