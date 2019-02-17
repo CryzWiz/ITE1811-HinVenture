@@ -1,4 +1,6 @@
-﻿TestUsers: The following users are created for testing. Userinfo listed under
+ITE1811 - Webapplikasjoner 2 Oblig. 
+
+TestUsers: The following users are created for testing. Userinfo listed under
 			the corresponding role they are created under.
 Admin:
 	Username:admin@test.com
