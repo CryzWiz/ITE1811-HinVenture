@@ -17,4 +17,3 @@ Freelancer:
 	Password:Password@123
 	BitCoinAddress:2NDCWFTsWtHvd2aF4AGhT58hZHj3wHCeoJL 
 
-BITCOIN-API KEY:d1c1-cab5-7545-31b5
